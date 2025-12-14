@@ -246,7 +246,7 @@ const Checkout = () => {
               </div>
               <div className="summary-row">
                 <span>Delivery Charge:</span>
-                <span>Rs {DELIVERY_CHARGE}</span>
+                <span>Rs {deliveryCharge}</span>
               </div>
               <div className="summary-row total">
                 <span>Total:</span>

@@ -17,6 +17,7 @@ import Inventory from './pages/admin/Inventory';
 import Orders from './pages/admin/Orders';
 import Analytics from './pages/admin/Analytics';
 import HeroEditor from './pages/admin/HeroEditor';
+import Settings from './pages/admin/Settings';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                 <Route path="orders" element={<Orders />} />
                 <Route path="analytics" element={<Analytics />} />
                 <Route path="hero" element={<HeroEditor />} />
+                <Route path="settings" element={<Settings />} />
               </Routes>
             </AdminLayout>
           </ProtectedRoute>

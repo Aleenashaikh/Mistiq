@@ -1,11 +1,27 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import axios from 'axios';
 import './Cart.css';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
-  const DELIVERY_CHARGE = 200;
-  const total = getCartTotal() + DELIVERY_CHARGE;
+  const [deliveryCharge, setDeliveryCharge] = useState(200);
+
+  useEffect(() => {
+    const fetchDeliveryCharge = async () => {
+      try {
+        const response = await axios.get('/api/admin/settings');
+        setDeliveryCharge(response.data.deliveryCharge);
+      } catch (error) {
+        console.error('Error fetching delivery charge:', error);
+        // Keep default 200 if fetch fails
+      }
+    };
+    fetchDeliveryCharge();
+  }, []);
+
+  const total = getCartTotal() + deliveryCharge;
 
   return (
     <div className="cart-page">
@@ -58,7 +74,7 @@ const Cart = () => {
               </div>
               <div className="summary-row">
                 <span>Delivery Charge:</span>
-                <span>Rs {DELIVERY_CHARGE}</span>
+                <span>Rs {deliveryCharge}</span>
               </div>
               <div className="summary-row total">
                 <span>Total:</span>
