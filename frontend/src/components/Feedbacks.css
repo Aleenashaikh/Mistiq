@@ -1,0 +1,132 @@
+.feedbacks-section {
+  padding: 8rem 2rem;
+  background: var(--black);
+  min-height: 500px;
+  width: 100%;
+  display: block;
+  position: relative;
+}
+
+.feedbacks-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.feedbacks-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feedbacks-subtitle {
+  font-size: 1.2rem;
+  color: var(--white);
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.feedbacks-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+}
+
+.feedback-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.feedback-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--gold);
+  box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+}
+
+.feedback-stars {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 1.5rem;
+}
+
+.feedback-stars .star {
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.feedback-stars .star.filled {
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.feedback-comments {
+  font-size: 1.1rem;
+  color: var(--white);
+  line-height: 1.8;
+  font-style: italic;
+  flex-grow: 1;
+  opacity: 0.9;
+}
+
+.feedback-author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.feedback-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.feedback-product {
+  font-size: 0.9rem;
+  color: var(--white);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .feedbacks-section {
+    padding: 4rem 1rem;
+  }
+
+  .feedbacks-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .feedback-card {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .feedbacks-section {
+    padding: 3rem 1rem;
+  }
+
+  .feedbacks-header {
+    margin-bottom: 3rem;
+  }
+
+  .feedback-card {
+    padding: 1.5rem;
+  }
+}
+

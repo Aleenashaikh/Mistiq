@@ -1,0 +1,137 @@
+.about-page {
+  padding-top: 120px;
+  min-height: 100vh;
+  background: var(--black);
+}
+
+.about-hero {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.about-hero h1 {
+  font-size: clamp(3rem, 8vw, 5rem);
+  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.about-section {
+  margin-bottom: 4rem;
+}
+
+.about-intro {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: var(--white);
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--white);
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+.mission-section {
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  margin-bottom: 4rem;
+}
+
+.mission-section h2 {
+  font-size: 2.5rem;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.mission-section p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.tagline-section {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.tagline-section h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-style: italic;
+  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-social-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  text-align: center;
+}
+
+.about-social-section h3 {
+  color: var(--gold);
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .about-hero {
+    padding: 3rem 1.5rem;
+  }
+
+  .about-content {
+    padding: 1.5rem;
+  }
+
+  .mission-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .mission-section h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero {
+    padding: 2rem 1rem;
+  }
+
+  .about-content {
+    padding: 1rem;
+  }
+
+  .about-intro {
+    font-size: 1.1rem;
+  }
+
+  .mission-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .mission-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .tagline-section {
+    padding: 3rem 1rem;
+  }
+}
+

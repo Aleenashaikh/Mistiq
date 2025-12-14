@@ -1,0 +1,132 @@
+.split-section {
+  padding: 8rem 2rem;
+  background: var(--black);
+  position: relative;
+}
+
+.split-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.split-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(212, 175, 55, 0.2);
+}
+
+.split-image img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.split-image:hover img {
+  transform: scale(1.05);
+}
+
+.split-content {
+  padding: 2rem;
+}
+
+.split-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.split-description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--white);
+  opacity: 0.9;
+  margin-bottom: 3rem;
+}
+
+.split-features {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.feature-item {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.feature-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.feature-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--gold);
+}
+
+.feature-item p {
+  color: var(--white);
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+.gold-separator {
+  max-width: 1400px;
+  margin: 4rem auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold),
+    transparent
+  );
+}
+
+@media (max-width: 968px) {
+  .split-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .split-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .split-image img {
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .split-section {
+    padding: 3rem 1rem;
+  }
+
+  .split-image img {
+    height: 300px;
+  }
+
+  .split-content {
+    padding: 1rem;
+  }
+
+  .split-features {
+    gap: 1.5rem;
+  }
+
+  .feature-item {
+    gap: 1rem;
+  }
+}
+
