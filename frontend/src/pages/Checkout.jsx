@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import axios from 'axios';
+import axios from '../config/axios';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -77,7 +77,10 @@ const Checkout = () => {
       };
 
       // Create axios instance without auth header for orders (no login required)
-      const orderAxios = axios.create();
+      // This instance will inherit baseURL from axios.defaults.baseURL
+      const orderAxios = axios.create({
+        baseURL: axios.defaults.baseURL, // Explicitly set to ensure baseURL is used
+      });
       const response = await orderAxios.post('/api/orders', orderData);
       
       clearCart();

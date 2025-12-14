@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '../context/ToastContext';
-import axios from 'axios';
+import axios from '../config/axios';
 import SocialMediaLinks from '../components/SocialMediaLinks';
 import './Feedback.css';
 

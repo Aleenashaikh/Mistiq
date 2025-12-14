@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../config/axios';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import PriceDisplay from '../components/PriceDisplay';

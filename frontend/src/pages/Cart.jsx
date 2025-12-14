@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import axios from 'axios';
+import axios from '../config/axios';
 import './Cart.css';
 
 const Cart = () => {

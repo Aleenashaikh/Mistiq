@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import axios from 'axios';
+import axios from '../../config/axios';
 import { useToast } from '../../context/ToastContext';
 import './Admin.css';
 

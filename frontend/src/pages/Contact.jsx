@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from '../config/axios';
 import { useToast } from '../context/ToastContext';
 import SocialMediaLinks from '../components/SocialMediaLinks';
 import './Contact.css';

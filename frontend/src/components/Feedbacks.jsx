@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import axios from 'axios';
+import axios from '../config/axios';
 import './Feedbacks.css';
 
 const Feedbacks = () => {
