@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 import HeroSection from '../models/HeroSection.js';
 import AnnouncementBanner from '../models/AnnouncementBanner.js';
@@ -8,18 +9,36 @@ const router = express.Router();
 // Get all products (only visible ones for public)
 router.get('/', async (req, res) => {
   try {
+    // Check MongoDB connection
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ 
+        message: 'Database connection error. Please try again later.',
+        error: 'MongoDB not connected'
+      });
+    }
+
     // Add caching headers
     res.set('Cache-Control', 'public, max-age=300, s-maxage=600'); // 5 min browser, 10 min CDN
     
     const products = await Product.find({ isVisible: true })
       .sort({ createdAt: -1 })
       .select('name bottleImage hoverImage price actualPrice discountedPrice stock rating gender impressionOf themeColor isVisible') // Only select needed fields
-      .lean(); // Use lean() for faster queries
+      .lean() // Use lean() for faster queries
+      .maxTimeMS(20000); // Add query timeout (20 seconds)
     
     res.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
-    res.status(500).json({ message: error.message });
+    
+    // Handle specific MongoDB errors
+    if (error.name === 'MongoServerError' || error.name === 'MongoTimeoutError' || error.message.includes('buffering timed out')) {
+      return res.status(503).json({ 
+        message: 'Database connection error. Please try again later.',
+        error: error.message 
+      });
+    }
+    
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 });
 

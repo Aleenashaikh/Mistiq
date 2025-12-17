@@ -75,13 +75,39 @@ app.use(async (req, res, next) => {
     }
     
     // Ensure MongoDB is connected before handling requests
+    // readyState: 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
     if (mongoose.connection.readyState !== 1) {
-      await connectDB();
+      // If connecting, wait for it
+      if (mongoose.connection.readyState === 2) {
+        // Wait up to 5 seconds for connection to complete
+        let attempts = 0;
+        while (mongoose.connection.readyState !== 1 && attempts < 10) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          attempts++;
+        }
+      }
+      
+      // If still not connected, try to connect
+      if (mongoose.connection.readyState !== 1) {
+        console.log('MongoDB not connected, attempting to connect...');
+        await connectDB();
+        
+        // Wait a bit more to ensure connection is fully established
+        let attempts = 0;
+        while (mongoose.connection.readyState !== 1 && attempts < 10) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          attempts++;
+        }
+        
+        if (mongoose.connection.readyState !== 1) {
+          throw new Error('Failed to establish MongoDB connection');
+        }
+      }
     }
     next();
   } catch (error) {
     console.error('MongoDB connection error in middleware:', error);
-    res.status(503).json({ 
+    return res.status(503).json({ 
       message: 'Database connection error. Please try again later.',
       error: error.message 
     });
