@@ -19,20 +19,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.use('/api/products', productRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/feedback', feedbackRoutes);
-app.use('/api/contact', contactRoutes);
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Mistiq Perfumeries API is running' });
-});
-
 // MongoDB connection - optimized for serverless
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/mistiq-perfumeries';
 
@@ -56,8 +42,11 @@ const connectDB = async () => {
     .connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 30000, // Increased for serverless environments
       socketTimeoutMS: 45000,
+      connectTimeoutMS: 30000, // Add connection timeout
+      maxPoolSize: 10, // Connection pooling
+      minPoolSize: 1,
     })
     .then(() => {
       isConnected = true;
@@ -73,6 +62,45 @@ const connectDB = async () => {
 
   return connectionPromise;
 };
+
+// Export connectDB for use in middleware
+export { connectDB };
+
+// MongoDB connection middleware - ensures connection before handling requests
+app.use(async (req, res, next) => {
+  try {
+    // Skip health check endpoint
+    if (req.path === '/api/health') {
+      return next();
+    }
+    
+    // Ensure MongoDB is connected before handling requests
+    if (mongoose.connection.readyState !== 1) {
+      await connectDB();
+    }
+    next();
+  } catch (error) {
+    console.error('MongoDB connection error in middleware:', error);
+    res.status(503).json({ 
+      message: 'Database connection error. Please try again later.',
+      error: error.message 
+    });
+  }
+});
+
+// Routes
+app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/feedback', feedbackRoutes);
+app.use('/api/contact', contactRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Mistiq Perfumeries API is running' });
+});
 
 // Connect to MongoDB on module load (for serverless)
 // This will be called once per serverless function instance
