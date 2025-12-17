@@ -194,7 +194,7 @@
 }
 
 .stars {
-  color: var(--gold);
+  color: var(--off-white);
   font-size: 1.2rem;
 }
 
@@ -283,7 +283,7 @@
 .loading {
   text-align: center;
   padding: 4rem;
-  color: var(--gold);
+  color: var(--off-white);
   font-size: 1.2rem;
 }
 

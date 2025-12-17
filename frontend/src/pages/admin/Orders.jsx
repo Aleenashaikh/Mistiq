@@ -162,7 +162,7 @@ const Orders = () => {
                         ? `${order.user.firstName} ${order.user.lastName}`
                         : order.user?.username || order.shippingAddress?.firstName || 'Guest'}
                     </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--gold)', opacity: 0.9 }}>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--off-white)', opacity: 0.9 }}>
                       {order.shippingAddress?.email || order.user?.email || 'N/A'}
                     </div>
                   </div>

@@ -37,14 +37,29 @@
   font-weight: 700;
   font-family: var(--font-heading);
   color: transparent;
-  -webkit-text-stroke: 2px var(--gold);
-  text-stroke: 2px var(--gold);
-  text-shadow: 
-    0 0 20px rgba(212, 175, 55, 0.5),
-    0 0 40px rgba(212, 175, 55, 0.3);
+  position: relative;
   letter-spacing: 0.1em;
   display: inline-block;
   white-space: nowrap;
+  -webkit-text-stroke: 2px transparent;
+  text-stroke: 2px transparent;
+}
+
+.marquee-text::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, var(--white), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-stroke: 2px;
+  text-stroke: 2px;
+  background-image: linear-gradient(135deg, var(--white), var(--gold));
+  -webkit-text-stroke-image: linear-gradient(135deg, var(--white), var(--gold));
+  text-stroke-image: linear-gradient(135deg, var(--white), var(--gold));
 }
 
 @keyframes scroll-left {

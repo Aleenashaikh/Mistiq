@@ -72,7 +72,7 @@
 .tagline-section h2 {
   font-size: clamp(2.5rem, 6vw, 4rem);
   font-style: italic;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  background: linear-gradient(135deg, var(--white), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

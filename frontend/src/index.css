@@ -37,6 +37,14 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+/* Main headings (h1) - gradient like "Our Signature Blends" */
+h1 {
+  background: linear-gradient(135deg, var(--white), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* Secondary headings (h2, h3, h4, h5, h6) - off-white by default */
 h2, h3, h4, h5, h6 {
   color: var(--off-white);

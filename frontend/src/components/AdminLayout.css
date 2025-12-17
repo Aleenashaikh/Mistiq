@@ -64,19 +64,19 @@
 .nav-item:hover {
   background: rgba(212, 175, 55, 0.1);
   border-left-color: var(--gold);
-  color: var(--gold);
+  color: var(--off-white);
 }
 
 .nav-item.active {
   background: rgba(212, 175, 55, 0.15);
   border-left-color: var(--gold);
-  color: var(--gold);
+  color: var(--off-white);
 }
 
 .nav-item.website-link {
   background: rgba(212, 175, 55, 0.1);
   border-left-color: var(--gold);
-  color: var(--gold);
+  color: var(--off-white);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }

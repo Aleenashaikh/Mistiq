@@ -131,7 +131,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.5 }}
           className="hero-buttons"
         >
-          <Link to="/products" className="btn btn-primary">
+          <Link to="/products" className="shop-btn">
             {hero.primaryButtonText || 'Shop Now'}
           </Link>
         

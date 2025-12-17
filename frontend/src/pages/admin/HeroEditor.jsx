@@ -220,7 +220,7 @@ const HeroEditor = () => {
       </form>
 
       <div style={{ marginTop: '3rem', paddingTop: '3rem', borderTop: '1px solid rgba(212, 175, 55, 0.2)' }}>
-        <h2 style={{ marginBottom: '1.5rem', color: 'var(--gold)' }}>Announcement Banner</h2>
+        <h2 style={{ marginBottom: '1.5rem', color: 'var(--off-white)' }}>Announcement Banner</h2>
         
         <form onSubmit={async (e) => {
           e.preventDefault();

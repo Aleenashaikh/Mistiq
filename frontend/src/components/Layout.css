@@ -99,7 +99,7 @@
 }
 
 .nav-links a:hover {
-  color: var(--gold);
+  color: var(--off-white);
 }
 
 .nav-links a:hover::after {
@@ -107,7 +107,7 @@
 }
 
 .user-name {
-  color: var(--gold);
+  color: var(--off-white);
   font-weight: 600;
 }
 
@@ -124,11 +124,11 @@
 }
 
 .logout-link:hover {
-  color: var(--gold);
+  color: var(--off-white);
 }
 
 .admin-portal-link {
-  color: var(--gold);
+  color: var(--off-white);
   font-weight: 600;
   position: relative;
 }

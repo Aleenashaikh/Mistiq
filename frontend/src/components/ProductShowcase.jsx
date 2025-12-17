@@ -170,12 +170,12 @@ const ProductShowcase = () => {
                     <span style={{ textDecoration: 'line-through', color: 'var(--white)', opacity: 0.5, fontSize: '0.9em' }}>
                       Rs {product.actualPrice || product.price}
                     </span>
-                    <span style={{ color: 'var(--gold)', fontWeight: '700', fontSize: '1.2em' }}>
+                    <span style={{ color: 'var(--off-white)', fontWeight: '700', fontSize: '1.2em' }}>
                       Rs {product.discountedPrice}
                     </span>
                   </div>
                 ) : (
-                  <span style={{ color: 'var(--gold)', fontWeight: '700', fontSize: '1.2em' }}>
+                  <span style={{ color: 'var(--off-white)', fontWeight: '700', fontSize: '1.2em' }}>
                     Rs {product.actualPrice || product.price || 0}
                   </span>
                 )}

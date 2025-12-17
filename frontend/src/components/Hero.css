@@ -93,14 +93,17 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
-  color: var(--black);
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+  padding: 1.2rem 2.5rem;
+  background: transparent;
+  border: 2px solid var(--off-white);
+  color: var(--off-white);
+  box-shadow: none;
 }
 
 .btn-primary:hover {
+  background: var(--off-white);
+  color: var(--black);
   transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
 }
 
 .btn-secondary {

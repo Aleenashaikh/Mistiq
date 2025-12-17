@@ -67,8 +67,10 @@
 }
 
 .feedback-stars .star.filled {
-  color: var(--gold);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  background: linear-gradient(135deg, var(--white), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .feedback-comments {
@@ -91,7 +93,7 @@
 .feedback-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--gold);
+  color: var(--off-white);
 }
 
 .feedback-product {

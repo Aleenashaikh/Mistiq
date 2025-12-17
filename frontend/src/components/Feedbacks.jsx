@@ -45,7 +45,7 @@ const Feedbacks = () => {
   if (loading) {
     return (
       <section className="feedbacks-section">
-        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--gold)' }}>
+        <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--off-white)' }}>
           Loading feedbacks...
         </div>
       </section>
