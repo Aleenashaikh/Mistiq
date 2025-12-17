@@ -8,13 +8,11 @@ const HeroEditor = () => {
     title: '',
     subtitle: '',
     backgroundImage: '',
-    backgroundVideo: '',
     primaryButtonText: 'Shop Now',
-    secondaryButtonText: 'Vote Your Favorite',
+    secondaryButtonText: 'Explore Collection',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploadingVideo, setUploadingVideo] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [banner, setBanner] = useState({
     text: 'Opening Sale Live',
@@ -50,58 +48,6 @@ const HeroEditor = () => {
 
   const handleChange = (e) => {
     setHero({ ...hero, [e.target.name]: e.target.value });
-  };
-
-  const handleVideoUpload = async (e) => {
-    e.preventDefault();
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Validate file type
-    const allowedTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/mkv'];
-    if (!allowedTypes.includes(file.type)) {
-      showToast('Invalid file type. Please upload MP4, MOV, AVI, WEBM, or MKV videos.', 'error');
-      e.target.value = '';
-      return;
-    }
-
-    // Validate file size (100MB)
-    if (file.size > 100 * 1024 * 1024) {
-      showToast('File size too large. Maximum size is 100MB.', 'error');
-      e.target.value = '';
-      return;
-    }
-
-    setUploadingVideo(true);
-    try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('video', file);
-
-      const response = await axios.post('/api/upload/product-video', uploadFormData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (!response.data || !response.data.videoPath) {
-        throw new Error('Invalid response from server');
-      }
-
-      setHero(prevHero => ({
-        ...prevHero,
-        backgroundVideo: response.data.videoPath
-      }));
-
-      showToast('Video uploaded successfully!', 'success');
-      e.target.value = '';
-    } catch (error) {
-      console.error('Video upload error:', error);
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to upload video';
-      showToast('Error uploading video: ' + errorMessage, 'error');
-      e.target.value = '';
-    } finally {
-      setUploadingVideo(false);
-    }
   };
 
   const handleImageUpload = async (e) => {
@@ -241,51 +187,8 @@ const HeroEditor = () => {
             placeholder="Or enter image URL manually"
             style={{ marginTop: '10px', width: '100%' }}
           />
-        </div>
-        
-        <div className="form-group">
-          <label>Background Video</label>
-          <input
-            type="file"
-            accept="video/*"
-            onChange={handleVideoUpload}
-            disabled={uploadingVideo}
-            style={{ marginBottom: '10px' }}
-          />
-          {uploadingVideo && <p style={{ color: '#d4af37', marginBottom: '10px' }}>Uploading to Cloudinary...</p>}
-          {hero.backgroundVideo && (
-            <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-              <video
-                src={hero.backgroundVideo}
-                controls
-                style={{
-                  width: '100%',
-                  maxWidth: '400px',
-                  maxHeight: '225px',
-                  border: '2px solid #d4af37',
-                  borderRadius: '8px',
-                  display: 'block'
-                }}
-              >
-                Your browser does not support the video tag.
-              </video>
-              <p style={{ fontSize: '0.85rem', color: '#999', wordBreak: 'break-all', marginTop: '5px' }}>
-                {hero.backgroundVideo.length > 60
-                  ? hero.backgroundVideo.substring(0, 60) + '...'
-                  : hero.backgroundVideo}
-              </p>
-            </div>
-          )}
-          <input
-            type="text"
-            name="backgroundVideo"
-            value={hero.backgroundVideo}
-            onChange={handleChange}
-            placeholder="Or enter video URL manually"
-            style={{ marginTop: '10px', width: '100%' }}
-          />
           <small style={{ color: '#999', fontSize: '0.85rem', display: 'block', marginTop: '5px' }}>
-            Supported formats: MP4, MOV, AVI, WEBM, MKV (Max 100MB)
+            Note: Hero video is now static and located at /images/perfume-hero.mp4. To change the video, replace the file in the public/images folder.
           </small>
         </div>
         

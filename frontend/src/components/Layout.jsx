@@ -8,6 +8,7 @@ import './Layout.css';
 const Layout = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [logoError, setLogoError] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
   const { getCartCount } = useCart();
   const navigate = useNavigate();
@@ -23,13 +24,31 @@ const Layout = ({ children }) => {
   const handleLogout = () => {
     logout();
     navigate('/');
+    setMobileMenuOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
   };
 
   return (
     <div className="layout">
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="nav-container">
-          <Link to="/" className="logo">
+          {/* Mobile Menu Button */}
+          <button 
+            className="mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className="hamburger">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+
+          <Link to="/" className="logo" onClick={closeMobileMenu}>
             {!logoError && (
               <img 
                 src="/images/logo.png" 
@@ -45,27 +64,33 @@ const Layout = ({ children }) => {
               </div>
             )}
           </Link>
-          <ul className="nav-links">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/products">Products</Link></li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-            <li><Link to="/feedback">Feedback</Link></li>
+
+          {/* Mobile Menu Overlay */}
+          {mobileMenuOpen && (
+            <div className="mobile-menu-overlay" onClick={closeMobileMenu}></div>
+          )}
+
+          <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
+            <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
+            <li><Link to="/products" onClick={closeMobileMenu}>Products</Link></li>
+            <li><Link to="/about" onClick={closeMobileMenu}>About</Link></li>
+            <li><Link to="/contact" onClick={closeMobileMenu}>Contact</Link></li>
+            <li><Link to="/feedback" onClick={closeMobileMenu}>Feedback</Link></li>
             <li>
-              <Link to="/cart">
+              <Link to="/cart" onClick={closeMobileMenu}>
                 Cart {getCartCount() > 0 && `(${getCartCount()})`}
               </Link>
             </li>
             {user ? (
               <>
                 {user.role === 'admin' && (
-                  <li><Link to="/admin/dashboard" className="admin-portal-link">Admin Portal</Link></li>
+                  <li><Link to="/admin/dashboard" className="admin-portal-link" onClick={closeMobileMenu}>Admin Portal</Link></li>
                 )}
                 <li><span className="user-name">{user.username}</span></li>
                 <li><button onClick={handleLogout} className="logout-link">Logout</button></li>
               </>
             ) : (
-              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/login" onClick={closeMobileMenu}>Login</Link></li>
             )}
           </ul>
         </div>

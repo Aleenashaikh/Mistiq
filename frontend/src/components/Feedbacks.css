@@ -1,6 +1,6 @@
 .feedbacks-section {
   padding: 8rem 2rem;
-  background: var(--black);
+  background: var(--black-light);
   min-height: 500px;
   width: 100%;
   display: block;
@@ -15,7 +15,7 @@
 .feedbacks-title {
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  background: linear-gradient(135deg, var(--white), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

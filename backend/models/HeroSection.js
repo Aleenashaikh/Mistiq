@@ -23,7 +23,7 @@ const heroSectionSchema = new mongoose.Schema({
   },
   secondaryButtonText: {
     type: String,
-    default: 'Vote Your Favorite',
+    default: 'Explore Collection',
   },
   isActive: {
     type: Boolean,

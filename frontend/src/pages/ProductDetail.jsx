@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import PriceDisplay from '../components/PriceDisplay';
 import SocialMediaLinks from '../components/SocialMediaLinks';
+import SEO from '../components/SEO';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -14,9 +15,10 @@ const ProductDetail = () => {
   const { showToast } = useToast();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [voting, setVoting] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState('main');
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -32,21 +34,6 @@ const ProductDetail = () => {
     };
     fetchProduct();
   }, [id]);
-
-  const handleVote = async () => {
-    if (voting) return;
-    setVoting(true);
-    try {
-      const response = await axios.post(`/api/vote/${id}`);
-      setProduct({ ...product, votes: response.data.votes });
-      showToast('Vote recorded successfully!', 'success');
-    } catch (error) {
-      console.error('Error voting:', error);
-      showToast('Error voting. Please try again.', 'error');
-    } finally {
-      setVoting(false);
-    }
-  };
 
   const handleAddToCart = () => {
     if (product.stock === 0) {
@@ -67,6 +54,40 @@ const ProductDetail = () => {
     navigate('/cart');
   };
 
+  // Touch handlers for image swiping
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe || isRightSwipe) {
+      const images = ['main'];
+      if (product?.hoverImage) images.push('hover');
+      if (product?.thirdImage) images.push('third');
+      
+      const currentIndex = images.indexOf(activeImage);
+      
+      if (isLeftSwipe && currentIndex < images.length - 1) {
+        setActiveImage(images[currentIndex + 1]);
+      } else if (isRightSwipe && currentIndex > 0) {
+        setActiveImage(images[currentIndex - 1]);
+      }
+    }
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -76,10 +97,26 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="product-detail-page">
-      <div className="product-detail-container">
+    <>
+      <SEO 
+        title={product ? `${product.name} - ${product.impressionOf} Dupe | Mistiq Perfumeries` : 'Product - Mistiq Perfumeries'}
+        description={product ? (product.description || `Shop ${product.name} - An affordable impression of ${product.impressionOf}. ${product.gender} fragrance dupe. Quality ${product.impressionOf} alternative at best prices.`) : 'Discover luxury fragrances'}
+        image={product?.bottleImage || '/images/logo.png'}
+        url={`/products/${id}`}
+        type="product"
+        impressionOf={product?.impressionOf || ''}
+        productName={product?.name || ''}
+        gender={product?.gender || ''}
+      />
+      <div className="product-detail-page">
+        <div className="product-detail-container">
         <div className="product-image-section">
-          <div className="detail-image-wrapper">
+          <div 
+            className={`detail-image-wrapper ${activeImage !== 'main' ? 'has-active' : ''}`}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <img 
               src={product.bottleImage || '/images/perfumes/placeholder.jpg'} 
               alt={product.name}
@@ -227,14 +264,6 @@ const ProductDetail = () => {
             >
               {product.stock === 0 ? 'Sold Out' : 'Add to Bag'}
             </button>
-            <button 
-              className="vote-btn-detail"
-              onClick={handleVote}
-              disabled={voting}
-              style={{ borderColor: product.themeColor, color: product.themeColor }}
-            >
-              {voting ? 'Voting...' : 'Vote for this fragrance'}
-            </button>
           </div>
 
           <div className="product-social-section">
@@ -244,6 +273,7 @@ const ProductDetail = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

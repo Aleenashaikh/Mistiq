@@ -64,8 +64,8 @@ const Checkout = () => {
         shippingAddress: {
           firstName: formData.firstName,
           lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
+          email: formData.email || undefined, // Optional email
+          phone: formData.phone.replace(/-/g, ''), // Remove dashes from phone
           street: formData.address,
           city: formData.city,
           state: formData.state,
@@ -140,13 +140,12 @@ const Checkout = () => {
                 </div>
               </div>
               <div className="form-group">
-                <label>Email *</label>
+                <label>Email (Optional)</label>
                 <input 
                   type="email" 
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required 
                 />
               </div>
               <div className="form-group">
@@ -156,11 +155,11 @@ const Checkout = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="03XX-XXXXXXX"
-                  pattern="[0-9]{4}-[0-9]{7}"
+                  placeholder="03XXXXXXXXX"
+                  pattern="[0-9]{11}"
                   required 
                 />
-                <small>Format: 03XX-XXXXXXX</small>
+                <small>Format: 03XXXXXXXXX (11 digits)</small>
               </div>
               <div className="form-group">
                 <label>Address *</label>

@@ -8,9 +8,17 @@ const router = express.Router();
 // Get all products (only visible ones for public)
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find({ isVisible: true }).sort({ createdAt: -1 });
+    // Add caching headers
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=600'); // 5 min browser, 10 min CDN
+    
+    const products = await Product.find({ isVisible: true })
+      .sort({ createdAt: -1 })
+      .select('name bottleImage hoverImage price actualPrice discountedPrice stock rating gender impressionOf themeColor isVisible') // Only select needed fields
+      .lean(); // Use lean() for faster queries
+    
     res.json(products);
   } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -18,7 +26,10 @@ router.get('/', async (req, res) => {
 // Get hero section (public route) - MUST come before /:id route
 router.get('/hero', async (req, res) => {
   try {
-    let hero = await HeroSection.findOne({ isActive: true });
+    // Add caching headers
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+    
+    let hero = await HeroSection.findOne({ isActive: true }).lean();
     
     if (!hero) {
       // Return default hero if none exists
@@ -26,15 +37,19 @@ router.get('/hero', async (req, res) => {
         title: 'Discover Scents That Tell Your Story',
         subtitle: 'Let your presence linger beautifully. Explore our handcrafted fragrances designed to match every personality.',
         backgroundImage: '',
-        backgroundVideo: '/videos/perfume-hero.mp4',
         primaryButtonText: 'Shop Now',
-        secondaryButtonText: 'Vote Your Favorite',
+        secondaryButtonText: 'Explore Collection',
         isActive: true,
       };
+    } else {
+      // Remove backgroundVideo from response - video is now static
+      const { backgroundVideo, ...heroWithoutVideo } = hero;
+      hero = heroWithoutVideo;
     }
     
     res.json(hero);
   } catch (error) {
+    console.error('Error fetching hero:', error);
     res.status(500).json({ message: error.message });
   }
 });

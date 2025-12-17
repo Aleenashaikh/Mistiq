@@ -78,10 +78,6 @@ const Feedbacks = () => {
 
       <div className="feedbacks-grid">
         {feedbacks && feedbacks.length > 0 ? feedbacks.map((feedback, index) => {
-          // Cycle through names: Sumair Mustafa, Umar Shaikh, Aqsa Shaikh
-          const names = ['Sumair Mustafa', 'Umar Shaikh', 'Aqsa Shaikh'];
-          const displayName = names[index % names.length];
-          
           return (
             <motion.div
               key={feedback._id || index}
@@ -102,7 +98,7 @@ const Feedbacks = () => {
               </div>
               <p className="feedback-comments">"{feedback.comments}"</p>
               <div className="feedback-author">
-                <span className="feedback-name">{displayName}</span>
+                <span className="feedback-name">{feedback.name}</span>
                 {feedback.product && (
                   <span className="feedback-product">{feedback.product}</span>
                 )}

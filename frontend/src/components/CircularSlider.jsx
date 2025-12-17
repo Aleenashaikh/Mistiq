@@ -7,6 +7,8 @@ const CircularSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   // Fetch latest 5 products
   useEffect(() => {
@@ -75,6 +77,32 @@ const CircularSlider = () => {
     return index === currentIndex ? 1 : 0;
   };
 
+  // Touch handlers for slider swiping
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && products.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % products.length);
+    } else if (isRightSwipe && products.length > 0) {
+      setCurrentIndex((prev) => (prev - 1 + products.length) % products.length);
+    }
+  };
+
   if (loading) {
     return (
       <section className="circular-slider-section">
@@ -126,7 +154,12 @@ const CircularSlider = () => {
 
           {/* Right Side - Circular Slider */}
           <div className="col-12 col-lg-5 p-0 slider-panel">
-            <div className="slider-main">
+            <div 
+              className="slider-main"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               <div className="slider-images">
                 {products.map((product, index) => (
                   <Link 

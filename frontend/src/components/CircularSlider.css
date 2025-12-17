@@ -1,6 +1,6 @@
 .circular-slider-section {
   padding: 8rem 2rem;
-  background: var(--black);
+  background: var(--black-light);
   position: relative;
   overflow: hidden;
   min-height: 600px;
@@ -60,7 +60,7 @@
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   margin-bottom: 3rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  background: linear-gradient(135deg, var(--white), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -117,6 +117,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: pan-y pinch-zoom;
 }
 
 .slider-images {
@@ -212,6 +213,7 @@
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
+  justify-content: center;
 }
 
 .dot {
@@ -253,11 +255,11 @@
     height: 400px;
   }
 
-  .slider-image.previous {
+  .slider-image-link.previous {
     transform: scale(0.7) translateX(-120px) translateZ(-100px);
   }
 
-  .slider-image.next {
+  .slider-image-link.next {
     transform: scale(0.7) translateX(120px) translateZ(-100px);
   }
 
@@ -282,11 +284,11 @@
     height: 320px;
   }
 
-  .slider-image.previous {
+  .slider-image-link.previous {
     transform: scale(0.6) translateX(-100px) translateZ(-100px);
   }
 
-  .slider-image.next {
+  .slider-image-link.next {
     transform: scale(0.6) translateX(100px) translateZ(-100px);
   }
 

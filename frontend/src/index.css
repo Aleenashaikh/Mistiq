@@ -5,13 +5,18 @@
 }
 
 :root {
-  --black: #000000;
+  --black: #1a1a1a; /* Soft dark grey instead of pure black */
+  --black-dark: #0f0f0f; /* For very dark elements */
+  --black-light: #2a2a2a; /* Lighter grey for cards/sections */
+  --black-lighter: #333333; /* Even lighter for hover states */
+  --grey: #3a3a3a; /* Medium grey for borders/separators */
   --gold: #d4af37;
   --white: #f5f5f5;
+  --off-white: #e8e8e8; /* Off-white for secondary headings and buttons */
   --ladies-pink: #d63384;
   --ladies-purple: #6f42c1;
   
-  --font-heading: 'Playfair Display', serif;
+  --font-heading: 'Poppins', sans-serif;
   --font-body: 'DM Sans', sans-serif;
 }
 
@@ -32,6 +37,11 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+/* Secondary headings (h2, h3, h4, h5, h6) - off-white by default */
+h2, h3, h4, h5, h6 {
+  color: var(--off-white);
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -46,7 +56,7 @@ button {
 
 /* Global select/dropdown styling */
 select {
-  background: rgba(0, 0, 0, 0.6) !important;
+  background: var(--black-light) !important;
   color: var(--white) !important;
   border: 1px solid rgba(212, 175, 55, 0.3) !important;
   appearance: none;
@@ -61,11 +71,11 @@ select {
 select:focus {
   outline: none;
   border-color: var(--gold) !important;
-  background-color: rgba(0, 0, 0, 0.8) !important;
+  background-color: var(--black-lighter) !important;
 }
 
 select option {
-  background: var(--black) !important;
+  background: var(--black-light) !important;
   color: var(--white) !important;
   padding: 0.5rem;
 }

@@ -12,6 +12,7 @@ import Signup from './pages/Signup';
 import Layout from './components/Layout';
 import AdminLayout from './components/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 import Dashboard from './pages/admin/Dashboard';
 import Inventory from './pages/admin/Inventory';
 import Orders from './pages/admin/Orders';
@@ -21,7 +22,9 @@ import Settings from './pages/admin/Settings';
 
 function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       {/* Public Routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
@@ -64,6 +67,7 @@ function App() {
         }
       />
     </Routes>
+    </>
   );
 }
 

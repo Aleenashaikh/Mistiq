@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from '../config/axios';
 import { useToast } from '../context/ToastContext';
 import SocialMediaLinks from '../components/SocialMediaLinks';
+import SEO from '../components/SEO';
 import './Contact.css';
 
 const Contact = () => {
@@ -33,8 +34,14 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact-page">
-      <div className="contact-hero">
+    <>
+      <SEO 
+        title="Contact Us - Mistiq Perfumeries | Perfume Inquiries"
+        description="Get in touch with Mistiq Perfumeries. Have questions about our designer perfume dupes, impressions, or want personalized fragrance recommendations? We're here to help."
+        url="/contact"
+      />
+      <div className="contact-page">
+        <div className="contact-hero">
         <h1>Let's Connect</h1>
         <p>
           Have questions or want personalized fragrance recommendations? We're here to help.
@@ -89,6 +96,7 @@ const Contact = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

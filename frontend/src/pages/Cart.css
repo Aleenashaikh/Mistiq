@@ -14,7 +14,7 @@
 .cart-container h1 {
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin-bottom: 3rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  background: linear-gradient(135deg, var(--white), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -35,8 +35,9 @@
 .shop-btn {
   display: inline-block;
   padding: 1.2rem 2.5rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
-  color: var(--black);
+  background: transparent;
+  border: 2px solid var(--off-white);
+  color: var(--off-white);
   font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
@@ -46,16 +47,18 @@
 }
 
 .shop-btn:hover {
+  background: var(--off-white);
+  color: var(--black);
   transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
 }
 
 .checkout-btn {
   display: block;
   width: 100%;
   padding: 1.2rem 2.5rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
-  color: var(--black);
+  background: transparent;
+  border: 2px solid var(--off-white);
+  color: var(--off-white);
   font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
@@ -67,8 +70,9 @@
 }
 
 .checkout-btn:hover {
+  background: var(--off-white);
+  color: var(--black);
   transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
 }
 
 .cart-content {
@@ -106,7 +110,7 @@
 .cart-item-info h3 {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
-  color: var(--white);
+  color: var(--off-white);
 }
 
 .cart-item-info p {
@@ -201,7 +205,7 @@
   padding-top: 1rem;
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--white);
 }
 
 @media (max-width: 968px) {

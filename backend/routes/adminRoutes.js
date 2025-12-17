@@ -258,6 +258,18 @@ router.get('/orders/:id/delivery-slip', async (req, res) => {
   }
 });
 
+// ========== SETTINGS MANAGEMENT (Public) ==========
+
+// Get settings (public route for delivery charge - must be before auth middleware)
+router.get('/settings', async (req, res) => {
+  try {
+    const settings = await Settings.getSettings();
+    res.json({ deliveryCharge: settings.deliveryCharge });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // All admin routes require authentication and admin role
 router.use(authenticate);
 router.use(isAdmin);
@@ -648,13 +660,15 @@ router.get('/hero', async (req, res) => {
         title: 'Discover Scents That Tell Your Story',
         subtitle: 'Let your presence linger beautifully. Explore our handcrafted fragrances designed to match every personality.',
         primaryButtonText: 'Shop Now',
-        secondaryButtonText: 'Vote Your Favorite',
+        secondaryButtonText: 'Explore Collection',
         isActive: true,
       });
       await hero.save();
     }
     
-    res.json(hero);
+    // Remove backgroundVideo from response - video is now static
+    const { backgroundVideo, ...heroResponse } = hero.toObject();
+    res.json(heroResponse);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -665,15 +679,21 @@ router.put('/hero', async (req, res) => {
   try {
     let hero = await HeroSection.findOne({ isActive: true });
     
+    // Remove backgroundVideo from request body - video is now static
+    const { backgroundVideo, ...heroData } = req.body;
+    
     if (!hero) {
-      hero = new HeroSection(req.body);
+      hero = new HeroSection(heroData);
       hero.isActive = true;
     } else {
-      Object.assign(hero, req.body);
+      Object.assign(hero, heroData);
     }
     
     await hero.save();
-    res.json(hero);
+    
+    // Remove backgroundVideo from response
+    const { backgroundVideo: _, ...heroResponse } = hero.toObject();
+    res.json(heroResponse);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -703,17 +723,7 @@ router.put('/announcement', async (req, res) => {
   }
 });
 
-// ========== SETTINGS MANAGEMENT ==========
-
-// Get settings (public route for delivery charge)
-router.get('/settings', async (req, res) => {
-  try {
-    const settings = await Settings.getSettings();
-    res.json({ deliveryCharge: settings.deliveryCharge });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// ========== SETTINGS MANAGEMENT (Admin Only) ==========
 
 // Get full settings (admin only)
 router.get('/settings/full', authenticate, isAdmin, async (req, res) => {

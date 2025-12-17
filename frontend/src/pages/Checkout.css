@@ -14,7 +14,7 @@
 .checkout-container h1 {
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
+  background: linear-gradient(135deg, var(--white), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -43,7 +43,7 @@
 
 .form-section h2 {
   font-size: 1.8rem;
-  color: var(--gold);
+  color: var(--off-white);
   margin-bottom: 1.5rem;
 }
 
@@ -84,8 +84,9 @@
 
 .place-order-btn {
   padding: 1.2rem 2.5rem;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
-  color: var(--black);
+  background: transparent;
+  border: 2px solid var(--off-white);
+  color: var(--off-white);
   font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
@@ -96,8 +97,9 @@
 }
 
 .place-order-btn:hover {
+  background: var(--off-white);
+  color: var(--black);
   transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
 }
 
 .checkout-layout {
@@ -131,7 +133,7 @@
 
 .order-summary h2 {
   font-size: 1.8rem;
-  color: var(--gold);
+  color: var(--off-white);
   margin-bottom: 1.5rem;
 }
 
@@ -165,7 +167,7 @@
   padding-top: 1rem;
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--white);
 }
 
 @media (max-width: 968px) {

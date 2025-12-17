@@ -95,9 +95,12 @@ router.post('/', async (req, res) => {
       await order.populate('user', 'email');
     }
     
-    // Send emails
+    // Send emails (only if email is provided)
     await sendOrderNotificationToAdmin(order);
-    await sendOrderConfirmationToCustomer(order, order.shippingAddress.email || order.user?.email);
+    const customerEmail = order.shippingAddress.email || order.user?.email;
+    if (customerEmail) {
+      await sendOrderConfirmationToCustomer(order, customerEmail);
+    }
     
     res.status(201).json(order);
   } catch (error) {

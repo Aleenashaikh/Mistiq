@@ -4,6 +4,7 @@ import axios from '../config/axios';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import PriceDisplay from '../components/PriceDisplay';
+import SEO from '../components/SEO';
 import './Products.css';
 
 const Products = () => {
@@ -46,8 +47,14 @@ const Products = () => {
   }, [filters, products]);
 
   return (
-    <div className="products-page">
-      <div className="products-hero">
+    <>
+      <SEO 
+        title="Our Collection - Mistiq Perfumeries | Perfume Dupes & Designer Impressions"
+        description="Explore our complete collection of luxury fragrances and designer perfume dupes. Find impressions of Gucci Flora, Miss Dior, Azzaro Wanted, Sauvage Dior, Tuscan Leather and more. Affordable designer alternatives."
+        url="/products"
+      />
+      <div className="products-page">
+        <div className="products-hero">
         <h1>Explore Our Collection</h1>
         <p>
           Each bottle is a masterpiece—carefully blended to complement your mood, personality, and style. 
@@ -152,6 +159,7 @@ const Products = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

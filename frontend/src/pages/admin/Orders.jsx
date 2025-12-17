@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from '../../config/axios';
 import './Admin.css';
 
+// Get the API base URL for constructing full URLs
+const API_BASE_URL = import.meta.env.VITE_API_TARGET || 'http://localhost:5000';
+
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -197,7 +200,8 @@ const Orders = () => {
                     <button
                       className="btn-download"
                       onClick={() => {
-                        window.open(`/api/admin/orders/${order._id}/delivery-slip`, '_blank');
+                        const slipUrl = `${API_BASE_URL}/api/admin/orders/${order._id}/delivery-slip`;
+                        window.open(slipUrl, '_blank');
                       }}
                       title="Download Delivery Slip"
                     >

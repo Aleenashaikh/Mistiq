@@ -20,34 +20,38 @@ const ProductShowcase = () => {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = async (attempt = 0) => {
       try {
-        const response = await axios.get('/api/products');
+        const response = await axios.get('/api/products', {
+          timeout: 10000, // 10 second timeout
+          headers: {
+            'Cache-Control': 'no-cache' // Let browser handle caching
+          }
+        });
         // API already filters visible products, but double-check
         const visibleProducts = response.data.filter(p => p.isVisible !== false);
         setProducts(visibleProducts);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        setProducts([]);
-        setLoading(false);
+        console.error(`Error fetching products (attempt ${attempt + 1}):`, error);
+        
+        const MAX_RETRIES = 3;
+        if (attempt < MAX_RETRIES) {
+          // Exponential backoff: wait 1s, 2s, 4s
+          const delay = Math.pow(2, attempt) * 1000;
+          setTimeout(() => {
+            fetchProducts(attempt + 1);
+          }, delay);
+        } else {
+          // Max retries reached
+          setProducts([]);
+          setLoading(false);
+          showToast('Failed to load products. Please refresh the page.', 'error');
+        }
       }
     };
     fetchProducts();
   }, []);
-
-  const handleVote = async (productId) => {
-    try {
-      const response = await axios.post(`/api/vote/${productId}`);
-      setProducts(products.map(p => 
-        p._id === productId ? { ...p, votes: response.data.votes } : p
-      ));
-      showToast('Vote recorded successfully!', 'success');
-    } catch (error) {
-      console.error('Error voting:', error);
-      showToast('Error voting. Please try again.', 'error');
-    }
-  };
 
   const handleAddToCart = (product) => {
     if (product.stock === 0) {
@@ -126,6 +130,8 @@ const ProductShowcase = () => {
                 src={product.bottleImage || '/images/perfumes/placeholder.jpg'} 
                 alt={product.name}
                 className="product-image main-image"
+                loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   if (!e.target.dataset.errorHandled) {
                     e.target.src = '/images/perfumes/placeholder.jpg';
@@ -187,17 +193,9 @@ const ProductShowcase = () => {
               </div>
               <div className="product-actions">
                 <button 
-                  className="vote-btn"
-                  onClick={() => handleVote(product._id)}
-                >
-                  Vote for this fragrance
-                </button>
-                <span className="vote-count">{product.votes} votes</span>
-                <button 
                   className="add-to-cart-btn"
                   onClick={() => handleAddToCart(product)}
                   disabled={product.stock === 0}
-                  style={{ marginTop: '0.5rem' }}
                 >
                   {product.stock === 0 ? 'Sold Out' : 'Add to Cart'}
                 </button>

@@ -1,9 +1,16 @@
 import SocialMediaLinks from '../components/SocialMediaLinks';
+import SEO from '../components/SEO';
 import './About.css';
 
 const About = () => {
   return (
-    <div className="about-page">
+    <>
+      <SEO 
+        title="About Us - Mistiq Perfumeries | Luxury Fragrance Brand"
+        description="Learn about Mistiq Perfumeries - our story, mission, and commitment to creating luxury fragrances and designer perfume dupes. Discover affordable impressions of Gucci, Dior, Azzaro and more."
+        url="/about"
+      />
+      <div className="about-page">
       <div className="about-hero">
         <h1>Our Story</h1>
       </div>
@@ -35,6 +42,7 @@ const About = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
