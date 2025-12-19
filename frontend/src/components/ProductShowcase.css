@@ -167,6 +167,12 @@
   color: var(--white);
 }
 
+.gender-size-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .product-gender {
   font-size: 0.85rem;
   padding: 0.3rem 0.8rem;
@@ -176,6 +182,13 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.product-size {
+  color: var(--white);
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
 .product-impression {

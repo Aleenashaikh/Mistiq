@@ -161,7 +161,10 @@ const ProductShowcase = () => {
             <div className="product-info">
               <div className="product-header">
                 <h3 className="product-name">{product.name}</h3>
-                <span className="product-gender">{product.gender}</span>
+                <div className="gender-size-container">
+                  <span className="product-gender">{product.gender}</span>
+                  <span className="product-size">50 mL</span>
+                </div>
               </div>
               <p className="product-impression">Inspired by {product.impressionOf}</p>
               <div style={{ marginTop: '1rem', marginBottom: '0.5rem' }}>

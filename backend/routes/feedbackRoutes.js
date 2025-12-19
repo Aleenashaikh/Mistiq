@@ -20,8 +20,7 @@ router.get('/', async (req, res) => {
     
     console.log('Fetching feedbacks with query:', JSON.stringify(query));
     const feedbacks = await Feedback.find(query)
-      .sort({ createdAt: -1 })
-      .limit(9); // Limit to 9 most recent
+      .sort({ createdAt: -1 });
     
     console.log(`Found ${feedbacks.length} feedbacks`);
     console.log('Feedbacks:', feedbacks.map(f => ({ name: f.name, stars: f.stars, visible: f.isVisible })));

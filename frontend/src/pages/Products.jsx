@@ -125,7 +125,10 @@ const Products = () => {
                     <div className="product-info">
                       <h3>{product.name}</h3>
                       <p className="product-impression">Inspired by {product.impressionOf}</p>
-                      <span className="product-gender">{product.gender}</span>
+                      <div className="gender-size-container">
+                        <span className="product-gender">{product.gender}</span>
+                        <span className="product-size">50 mL</span>
+                      </div>
                       <div className="product-stock-small">
                         {product.stock > 0 ? `` : 'Sold Out'}
                       </div>

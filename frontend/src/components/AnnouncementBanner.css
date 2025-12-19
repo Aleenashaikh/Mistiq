@@ -31,7 +31,7 @@
   text-transform: uppercase;
   display: inline-block;
   padding: 0;
-  animation: scroll-left 25s linear infinite;
+  animation: scroll-left 40s linear infinite;
   white-space: nowrap;
   will-change: transform;
 }
@@ -80,7 +80,7 @@
   .announcement-text {
     font-size: 0.95rem;
     letter-spacing: 2px;
-    animation-duration: 20s;
+    animation-duration: 35s;
   }
 }
 
@@ -92,7 +92,7 @@
   .announcement-text {
     font-size: 0.85rem;
     letter-spacing: 1.5px;
-    animation-duration: 18s;
+    animation-duration: 30s;
   }
 }
 

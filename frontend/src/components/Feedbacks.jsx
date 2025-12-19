@@ -13,7 +13,7 @@ const Feedbacks = () => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        // Fetch 3, 4, or 5 star feedbacks
+        // Fetch all 3, 4, or 5 star feedbacks
         console.log('Fetching feedbacks from /api/feedback?minStars=3');
         const response = await axios.get('/api/feedback?minStars=3');
         console.log('Feedbacks API response:', response);
@@ -22,7 +22,8 @@ const Feedbacks = () => {
         console.log('Feedbacks data length:', response.data?.length);
         
         if (Array.isArray(response.data)) {
-          setFeedbacks(response.data);
+          // Show only the latest 3 feedbacks on home page
+          setFeedbacks(response.data.slice(0, 3));
         } else {
           console.warn('Response data is not an array:', response.data);
           setFeedbacks([]);

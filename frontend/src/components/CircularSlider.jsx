@@ -3,6 +3,21 @@ import axios from '../config/axios';
 import { Link } from 'react-router-dom';
 import './CircularSlider.css';
 
+// Helper function to get first sentence from description
+const getFirstSentence = (text) => {
+  if (!text || text.trim() === '') {
+    return 'Discover this exquisite fragrance that captures the essence of luxury.';
+  }
+  // Split by period, exclamation, or question mark and take first sentence
+  const sentences = text.split(/[.!?]+/);
+  const firstSentence = sentences[0].trim();
+  // If first sentence is empty or too short, use the whole text up to 100 chars
+  if (firstSentence.length < 10) {
+    return text.substring(0, 100).trim() + (text.length > 100 ? '...' : '');
+  }
+  return firstSentence + '.';
+};
+
 const CircularSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [products, setProducts] = useState([]);
@@ -39,21 +54,6 @@ const CircularSlider = () => {
 
     fetchProducts();
   }, []);
-
-  // Helper function to get first sentence from description
-  const getFirstSentence = (text) => {
-    if (!text || text.trim() === '') {
-      return 'Discover this exquisite fragrance that captures the essence of luxury.';
-    }
-    // Split by period, exclamation, or question mark and take first sentence
-    const sentences = text.split(/[.!?]+/);
-    const firstSentence = sentences[0].trim();
-    // If first sentence is empty or too short, use the whole text up to 100 chars
-    if (firstSentence.length < 10) {
-      return text.substring(0, 100).trim() + (text.length > 100 ? '...' : '');
-    }
-    return firstSentence + '.';
-  };
 
   useEffect(() => {
     if (products.length === 0) return;
