@@ -229,7 +229,6 @@ const Layout = ({ children }) => {
                 }}
               >
                 Products
-                <span className="nav-products-arrow">{productsDropdownOpen ? '−' : '+'}</span>
               </button>
               <ProductsDropdown 
                 isOpen={productsDropdownOpen} 
