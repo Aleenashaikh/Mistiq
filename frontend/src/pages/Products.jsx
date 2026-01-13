@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import axios from '../config/axios';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
@@ -7,15 +7,25 @@ import PriceDisplay from '../components/PriceDisplay';
 import SEO from '../components/SEO';
 import './Products.css';
 
+// Category definitions matching ProductCategories
+const categories = {
+  'best-seller': { products: ['morgan', 'inferno', 'eloria'] },
+  'bold-intense': { products: ['morgan', 'inferno'] },
+  'fresh-modern': { products: ['oro blue', 'eloria', 'morgan'] },
+  'floral-romantic': { products: ['eloria', 'La Fleure'] }
+};
+
 const Products = () => {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const { showToast } = useToast();
+
   const [filters, setFilters] = useState({
-    gender: 'All',
-    category: 'All',
+    gender: searchParams.get('gender') || 'All',
+    category: searchParams.get('category') || 'All',
   });
 
   useEffect(() => {
@@ -23,7 +33,6 @@ const Products = () => {
       try {
         const response = await axios.get('/api/products');
         setProducts(response.data);
-        setFilteredProducts(response.data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -34,17 +43,36 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
+    // Update filters from URL params
+    const genderParam = searchParams.get('gender');
+    const categoryParam = searchParams.get('category');
+    setFilters({
+      gender: genderParam || 'All',
+      category: categoryParam || 'All',
+    });
+  }, [searchParams]);
+
+  useEffect(() => {
     let filtered = products;
     
     if (filters.gender !== 'All') {
       filtered = filtered.filter(p => p.gender === filters.gender);
     }
 
+    if (filters.category !== 'All' && categories[filters.category]) {
+      const categoryProducts = categories[filters.category].products;
+      filtered = filtered.filter(p => 
+        categoryProducts.some(name => 
+          p.name.toLowerCase().trim() === name.toLowerCase().trim()
+        )
+      );
+    }
+
     setFilteredProducts(filtered);
     
     // Scroll to top when filter changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [filters, products]);
+  }, [filters, products, categories]);
 
   return (
     <>

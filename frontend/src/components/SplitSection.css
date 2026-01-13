@@ -1,6 +1,6 @@
 .split-section {
-  padding: 8rem 2rem;
-  background: var(--black);
+  padding: 6rem 2rem;
+  background: var(--white);
   position: relative;
 }
 
@@ -16,8 +16,9 @@
 .split-image {
   position: relative;
   overflow: hidden;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(212, 175, 55, 0.2);
+  border-radius: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--beige);
 }
 
 .split-image img {
@@ -36,20 +37,20 @@
 }
 
 .split-title {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--black);
+  font-weight: 300;
+  letter-spacing: 2px;
 }
 
 .split-description {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: var(--white);
+  color: var(--charcoal);
   opacity: 0.9;
   margin-bottom: 3rem;
+  font-weight: 300;
 }
 
 .split-features {
@@ -72,25 +73,22 @@
 .feature-item h3 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-  color: var(--off-white);
+  color: var(--black);
+  font-weight: 400;
 }
 
 .feature-item p {
-  color: var(--white);
+  color: var(--charcoal);
   opacity: 0.8;
   font-size: 0.95rem;
+  font-weight: 300;
 }
 
 .gold-separator {
   max-width: 1400px;
   margin: 4rem auto 0;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--gold),
-    transparent
-  );
+  background: var(--beige);
 }
 
 @media (max-width: 968px) {

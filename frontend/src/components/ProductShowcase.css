@@ -1,6 +1,6 @@
 .product-showcase {
-  padding: 8rem 2rem;
-  background: var(--black);
+  padding: 6rem 2rem;
+  background: var(--cream);
 }
 
 .showcase-header {
@@ -11,18 +11,18 @@
 .showcase-title {
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--black);
+  font-weight: 300;
+  letter-spacing: 2px;
 }
 
 .showcase-subtitle {
   font-size: 1.2rem;
-  color: var(--white);
+  color: var(--charcoal);
   opacity: 0.8;
   max-width: 600px;
   margin: 0 auto;
+  font-weight: 300;
 }
 
 .products-grid {
@@ -34,18 +34,18 @@
 }
 
 .product-card {
-  background: var(--black-light);
-  border-radius: 20px;
+  background: var(--white);
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  transition: all 0.4s ease;
+  border: 1px solid var(--beige);
+  transition: all 0.3s ease;
   position: relative;
+  box-shadow: none;
 }
 
 .product-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--accent-color);
-  box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--taupe);
 }
 
 .product-image-wrapper {
@@ -53,7 +53,7 @@
   width: 100%;
   height: 400px;
   overflow: hidden;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+  background: var(--cream);
 }
 
 .discount-badge-card {
@@ -135,19 +135,19 @@
 .view-details-btn {
   padding: 1rem 2rem;
   background: transparent;
-  border: 2px solid var(--off-white);
-  color: var(--off-white);
-  font-weight: 600;
-  border-radius: 50px;
+  border: 1px solid var(--black);
+  color: var(--black);
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 0.85rem;
+  border-radius: 0;
   transition: all 0.3s ease;
 }
 
 .view-details-btn:hover {
-  background: var(--off-white);
-  color: var(--black);
-  transform: scale(1.05);
+  background: var(--black);
+  color: var(--white);
 }
 
 .product-info {
@@ -162,9 +162,11 @@
 }
 
 .product-name {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--white);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--black);
+  font-family: var(--font-heading);
+  letter-spacing: 1px;
 }
 
 .gender-size-container {
@@ -176,27 +178,29 @@
 .product-gender {
   font-size: 0.85rem;
   padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  background: var(--accent-color);
-  color: var(--white);
-  font-weight: 600;
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--charcoal);
+  color: var(--charcoal);
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .product-size {
-  color: var(--white);
-  font-weight: 500;
+  color: var(--charcoal);
+  font-weight: 300;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
 }
 
 .product-impression {
-  color: var(--white);
+  color: var(--charcoal);
   opacity: 0.7;
   font-size: 0.95rem;
   margin-bottom: 1rem;
   font-style: italic;
+  font-weight: 300;
 }
 
 .product-rating {

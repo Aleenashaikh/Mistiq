@@ -1,99 +1,107 @@
 .about-page {
   padding-top: 120px;
   min-height: 100vh;
-  background: var(--black);
+  background: var(--cream);
 }
 
 .about-hero {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 2rem 1rem;
 }
 
 .about-hero h1 {
-  font-size: clamp(3rem, 8vw, 5rem);
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-family: var(--font-heading);
+  font-weight: 300;
+  color: var(--black);
+  letter-spacing: 2px;
 }
 
 .about-content {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .about-section {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .about-intro {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 1.8;
-  color: var(--white);
+  color: var(--charcoal);
   margin-bottom: 2rem;
-  font-weight: 500;
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .about-section p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.8;
-  color: var(--white);
-  opacity: 0.9;
+  color: var(--charcoal);
   margin-bottom: 1.5rem;
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .mission-section {
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  margin-bottom: 4rem;
+  padding: 2rem;
+  background: var(--white);
+  border: 1px solid var(--beige);
+  margin-bottom: 2rem;
 }
 
 .mission-section h2 {
-  font-size: 2.5rem;
-  color: var(--off-white);
+  font-size: 2rem;
+  font-family: var(--font-heading);
+  font-weight: 300;
+  color: var(--black);
   margin-bottom: 1.5rem;
+  letter-spacing: 1px;
 }
 
 .mission-section p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.8;
-  color: var(--white);
-  opacity: 0.9;
+  color: var(--charcoal);
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .tagline-section {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 2rem 1rem;
 }
 
 .tagline-section h2 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-family: var(--font-heading);
+  font-weight: 300;
   font-style: italic;
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--black);
+  letter-spacing: 2px;
 }
 
 .about-social-section {
-  margin-top: 4rem;
-  padding-top: 3rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--beige);
   text-align: center;
 }
 
 .about-social-section h3 {
-  color: var(--off-white);
-  font-size: 1.8rem;
+  color: var(--charcoal);
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 300;
   margin-bottom: 2rem;
+  letter-spacing: 1px;
 }
 
 @media (max-width: 768px) {
   .about-hero {
-    padding: 3rem 1.5rem;
+    padding: 2rem 1.5rem;
   }
 
   .about-content {
@@ -105,7 +113,7 @@
   }
 
   .mission-section h2 {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 }
 
@@ -127,11 +135,10 @@
   }
 
   .mission-section h2 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .tagline-section {
     padding: 3rem 1rem;
   }
 }
-

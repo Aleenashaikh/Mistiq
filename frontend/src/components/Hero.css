@@ -1,12 +1,13 @@
 .hero {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   min-height: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: var(--cream);
 }
 
 .hero-video {
@@ -30,8 +31,8 @@
   bottom: 0;
   background: linear-gradient(
     180deg,
-    rgba(26, 26, 26, 0.3) 0%,
-    rgba(26, 26, 26, 0.6) 100%
+    rgba(245, 243, 240, 0.4) 0%,
+    rgba(245, 243, 240, 0.7) 100%
   );
   z-index: 2;
 }
@@ -51,23 +52,26 @@
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 700;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 300;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--white), var(--gold));
+  background: linear-gradient(135deg, #d4af37, #000000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
+  letter-spacing: 2px;
   line-height: 1.2;
 }
 
 .hero-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  color: var(--white);
-  opacity: 0.9;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--charcoal);
+  opacity: 0.8;
   margin-bottom: 2.5rem;
   line-height: 1.8;
-  font-weight: 400;
+  font-weight: 300;
+  max-width: 600px;
 }
 
 .hero-buttons {
@@ -82,56 +86,40 @@
 
 .btn {
   padding: 1rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 1.5px;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  border-radius: 50px;
+  border-radius: 0;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
 .btn-primary {
-  padding: 1.2rem 2.5rem;
+  padding: 1rem 2.5rem;
   background: transparent;
-  border: 2px solid var(--off-white);
-  color: var(--off-white);
+  border: 1px solid var(--black);
+  color: var(--black);
   box-shadow: none;
 }
 
 .btn-primary:hover {
-  background: var(--off-white);
-  color: var(--black);
-  transform: translateY(-2px);
+  background: var(--black);
+  color: var(--white);
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--white);
-  border: 2px solid var(--gold);
+  color: var(--charcoal);
+  border: 1px solid var(--charcoal);
   position: relative;
 }
 
-.btn-secondary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--gold), #f4d03f);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
 .btn-secondary:hover {
-  color: var(--black);
-  border-color: var(--gold);
-}
-
-.btn-secondary:hover::before {
-  left: 0;
+  background: var(--charcoal);
+  color: var(--white);
+  border-color: var(--charcoal);
 }
 
 @media (max-width: 768px) {

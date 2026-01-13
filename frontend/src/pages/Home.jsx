@@ -1,8 +1,7 @@
 import Hero from '../components/Hero';
 import AnnouncementBanner from '../components/AnnouncementBanner';
-import SplitSection from '../components/SplitSection';
+import ProductCategories from '../components/ProductCategories';
 import CircularSlider from '../components/CircularSlider';
-import MovingText from '../components/MovingText';
 import Feedbacks from '../components/Feedbacks';
 import SEO from '../components/SEO';
 import './Home.css';
@@ -18,9 +17,8 @@ const Home = () => {
       <div className="home">
         <Hero />
         <AnnouncementBanner />
-        <SplitSection />
+        <ProductCategories />
         <CircularSlider />
-        <MovingText />
         <Feedbacks />
       </div>
     </>

@@ -5,19 +5,28 @@
 }
 
 :root {
-  --black: #1a1a1a; /* Soft dark grey instead of pure black */
-  --black-dark: #0f0f0f; /* For very dark elements */
-  --black-light: #2a2a2a; /* Lighter grey for cards/sections */
-  --black-lighter: #333333; /* Even lighter for hover states */
-  --grey: #3a3a3a; /* Medium grey for borders/separators */
-  --gold: #d4af37;
-  --white: #f5f5f5;
-  --off-white: #e8e8e8; /* Off-white for secondary headings and buttons */
+  /* Diptyque-inspired light, elegant palette */
+  --cream: #F5F3F0;        /* Main background - soft cream */
+  --white: #FFFFFF;        /* Pure white for cards/sections */
+  --black: #1A1A1A;        /* Deep black for text */
+  --charcoal: #2C2C2C;     /* Softer black for secondary text */
+  --gold: #C9A961;         /* Muted, sophisticated gold */
+  --beige: #E8E5E0;        /* Light beige for borders/separators */
+  --taupe: #D4C5B0;        /* Warm taupe for accents */
+  
+  /* Legacy variables for backward compatibility - will be phased out */
+  --black-dark: #1A1A1A;
+  --black-light: #FFFFFF;
+  --black-lighter: #F5F3F0;
+  --grey: #E8E5E0;
+  --off-white: #2C2C2C;
   --ladies-pink: #d63384;
   --ladies-purple: #6f42c1;
   
-  --font-heading: 'Poppins', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
+  /* Elegant typography */
+  --font-heading: 'Playfair Display', 'Cormorant Garamond', serif;
+  --font-body: 'Inter', 'Work Sans', sans-serif;
+  --font-accent: 'Cormorant', serif;
 }
 
 html {
@@ -26,28 +35,31 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--black);
-  color: var(--white);
-  line-height: 1.6;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  line-height: 1.8;
   overflow-x: hidden;
+  font-weight: 300;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--black);
 }
 
-/* Main headings (h1) - gradient like "Our Signature Blends" */
+/* Main headings (h1) - elegant, solid black */
 h1 {
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--black);
+  font-weight: 300;
+  letter-spacing: 2px;
 }
 
-/* Secondary headings (h2, h3, h4, h5, h6) - off-white by default */
+/* Secondary headings - charcoal */
 h2, h3, h4, h5, h6 {
-  color: var(--off-white);
+  color: var(--charcoal);
+  font-weight: 400;
 }
 
 a {
@@ -64,13 +76,13 @@ button {
 
 /* Global select/dropdown styling */
 select {
-  background: var(--black-light) !important;
-  color: var(--white) !important;
-  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  background: var(--white) !important;
+  color: var(--charcoal) !important;
+  border: 1px solid var(--beige) !important;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4af37' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231A1A1A' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
   background-repeat: no-repeat !important;
   background-position: right 0.8rem center !important;
   padding-right: 2.5rem !important;
@@ -78,13 +90,13 @@ select {
 
 select:focus {
   outline: none;
-  border-color: var(--gold) !important;
-  background-color: var(--black-lighter) !important;
+  border-color: var(--charcoal) !important;
+  background-color: var(--white) !important;
 }
 
 select option {
-  background: var(--black-light) !important;
-  color: var(--white) !important;
+  background: var(--white) !important;
+  color: var(--charcoal) !important;
   padding: 0.5rem;
 }
 
@@ -94,16 +106,16 @@ select option {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--black);
+  background: var(--cream);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gold);
+  background: var(--taupe);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b8941f;
+  background: var(--charcoal);
 }
 
 /* Mobile optimizations */

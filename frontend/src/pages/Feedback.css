@@ -1,83 +1,85 @@
 .feedback-page {
   min-height: calc(100vh - 200px);
-  background: var(--black);
-  padding: 2rem 0;
+  background: var(--cream);
+  padding: 1rem 0;
 }
 
 .feedback-hero {
   text-align: center;
-  padding: 4rem 2rem 2rem;
+  padding: 2rem 1rem 1rem;
   max-width: 800px;
   margin: 0 auto;
 }
 
 .feedback-hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-family: var(--font-heading);
+  font-weight: 300;
+  color: var(--black);
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 2px;
 }
 
 .feedback-hero p {
-  font-size: 1.2rem;
-  color: var(--white);
-  opacity: 0.8;
+  font-size: 1rem;
+  color: var(--charcoal);
   line-height: 1.8;
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .feedback-container {
   max-width: 700px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .feedback-form {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  padding: 3rem;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  background: var(--white);
+  border: 1px solid var(--beige);
+  padding: 2rem;
 }
 
 .form-group {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-group label {
   display: block;
-  font-size: 1.1rem;
-  color: var(--off-white);
+  font-size: 0.95rem;
+  color: var(--charcoal);
   margin-bottom: 0.8rem;
-  font-weight: 600;
+  font-weight: 400;
+  font-family: var(--font-body);
+  letter-spacing: 0.5px;
 }
 
 .form-group input[type="text"],
 .form-group input[type="email"],
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 10px;
-  color: var(--white);
+  background: var(--white);
+  border: 1px solid var(--beige);
+  color: var(--black);
   font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  font-weight: 300;
+  transition: border-color 0.3s ease;
 }
 
 .form-group input[type="text"]:focus,
 .form-group input[type="email"]:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
-  border-color: var(--gold);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+  border-color: var(--charcoal);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--taupe);
 }
 
 .form-group textarea {
@@ -93,109 +95,94 @@
 
 .star-button {
   background: transparent;
-  border: 2px solid rgba(212, 175, 55, 0.3);
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 2rem;
-  width: 60px;
-  height: 60px;
+  border: 1px solid var(--beige);
+  color: var(--taupe);
+  font-size: 1.5rem;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-body);
 }
 
 .star-button:hover {
-  border-color: var(--gold);
-  transform: scale(1.1);
-  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+  background: linear-gradient(135deg, #d4af37, #f4e4b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .star-button.active {
-  color: var(--off-white);
-  border-color: var(--off-white);
-  background: rgba(212, 175, 55, 0.2);
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  background: linear-gradient(135deg, #d4af37, #f4e4b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  border-color: #d4af37;
 }
 
 .form-group small {
   display: block;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.9rem;
+  color: var(--charcoal);
+  font-size: 0.85rem;
   margin-top: 0.5rem;
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .submit-button {
   width: 100%;
-  padding: 1.2rem;
-  background: transparent;
-  border: 2px solid var(--off-white);
-  color: var(--off-white);
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  padding: 1rem 2rem;
+  background: var(--black);
+  border: 1px solid var(--black);
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 400;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: var(--font-body);
 }
 
 .submit-button:hover:not(:disabled) {
-  background: var(--off-white);
+  background: var(--white);
   color: var(--black);
-  transform: translateY(-2px);
 }
 
 .submit-button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .feedback-social-section {
-  margin-top: 3rem;
-  padding-top: 3rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--beige);
   text-align: center;
 }
 
 .feedback-social-section h3 {
-  color: var(--off-white);
-  font-size: 1.5rem;
+  color: var(--charcoal);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 300;
   margin-bottom: 2rem;
+  letter-spacing: 1px;
 }
 
 @media (max-width: 768px) {
   .feedback-hero {
-    padding: 3rem 1.5rem 1.5rem;
+    padding: 1.5rem 1rem 1rem;
   }
 
   .feedback-container {
     padding: 1rem;
-  }
-
-  .feedback-form {
-    padding: 2rem;
-  }
-
-  .star-button {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .feedback-hero {
-    padding: 2rem 1rem 1rem;
-  }
-
-  .feedback-hero h1 {
-    font-size: 2rem;
-  }
-
-  .feedback-hero p {
-    font-size: 1rem;
   }
 
   .feedback-form {
@@ -209,3 +196,26 @@
   }
 }
 
+@media (max-width: 480px) {
+  .feedback-hero {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .feedback-hero h1 {
+    font-size: 2rem;
+  }
+
+  .feedback-hero p {
+    font-size: 0.95rem;
+  }
+
+  .feedback-form {
+    padding: 1.5rem;
+  }
+
+  .star-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}

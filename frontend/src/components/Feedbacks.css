@@ -1,6 +1,6 @@
 .feedbacks-section {
-  padding: 8rem 2rem;
-  background: var(--black-light);
+  padding: 6rem 2rem;
+  background: var(--cream);
   min-height: 500px;
   width: 100%;
   display: block;
@@ -15,18 +15,18 @@
 .feedbacks-title {
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--black);
+  font-weight: 300;
+  letter-spacing: 2px;
 }
 
 .feedbacks-subtitle {
   font-size: 1.2rem;
-  color: var(--white);
+  color: var(--charcoal);
   opacity: 0.8;
   max-width: 600px;
   margin: 0 auto;
+  font-weight: 300;
 }
 
 .feedbacks-grid {
@@ -38,21 +38,21 @@
 }
 
 .feedback-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
+  background: var(--white);
+  border-radius: 0;
   padding: 2.5rem;
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  transition: all 0.4s ease;
+  border: 1px solid var(--beige);
+  transition: all 0.3s ease;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  box-shadow: none;
 }
 
 .feedback-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--gold);
-  box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-color: var(--taupe);
 }
 
 .feedback-stars {
@@ -62,24 +62,26 @@
 }
 
 .feedback-stars .star {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--beige);
   transition: all 0.3s ease;
 }
 
 .feedback-stars .star.filled {
-  background: linear-gradient(135deg, var(--white), var(--gold));
+  background: linear-gradient(135deg, #d4af37, #f4e4b7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
 .feedback-comments {
   font-size: 1.1rem;
-  color: var(--white);
+  color: var(--charcoal);
   line-height: 1.8;
   font-style: italic;
   flex-grow: 1;
   opacity: 0.9;
+  font-weight: 300;
 }
 
 .feedback-author {
@@ -87,20 +89,21 @@
   flex-direction: column;
   gap: 0.3rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  border-top: 1px solid var(--beige);
 }
 
 .feedback-name {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--off-white);
+  font-weight: 400;
+  color: var(--charcoal);
 }
 
 .feedback-product {
   font-size: 0.9rem;
-  color: var(--white);
+  color: var(--charcoal);
   opacity: 0.7;
   font-style: italic;
+  font-weight: 300;
 }
 
 @media (max-width: 768px) {

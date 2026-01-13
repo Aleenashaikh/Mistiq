@@ -1,14 +1,109 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import SocialMediaLinks from './SocialMediaLinks';
+import ProductsDropdown from './ProductsDropdown';
 import './Layout.css';
+
+// Footer component with categories
+const Footer = () => {
+  const [expandedSection, setExpandedSection] = useState(null);
+  const location = useLocation();
+  const categories = [
+    { title: 'Best Seller', products: ['morgan', 'inferno', 'eloria'] },
+    { title: 'Bold & Intense', products: ['morgan', 'inferno'] },
+    { title: 'Fresh & Modern', products: ['oro blue', 'eloria', 'morgan'] },
+    { title: 'Floral & Romantic', products: ['eloria', 'La Fleure'] }
+  ];
+
+  // Close expanded section when route changes
+  useEffect(() => {
+    setExpandedSection(null);
+  }, [location.pathname]);
+
+  const getCategoryUrl = (categoryTitle) => {
+    const categoryMap = {
+      'Best Seller': 'best-seller',
+      'Bold & Intense': 'bold-intense',
+      'Fresh & Modern': 'fresh-modern',
+      'Floral & Romantic': 'floral-romantic'
+    };
+    return `/products?category=${categoryMap[categoryTitle] || categoryTitle.toLowerCase().replace(/\s+/g, '-')}`;
+  };
+
+  const toggleSection = (section) => {
+    setExpandedSection(expandedSection === section ? null : section);
+  };
+
+  return (
+    <footer className="footer">
+      <div className="footer-box">
+        <div className="footer-columns">
+          <div className="footer-left">
+            <div className="footer-section">
+              <h3 
+                className="footer-heading"
+                onClick={() => toggleSection('shop')}
+              >
+                Shop
+                <span className="footer-toggle-icon">{expandedSection === 'shop' ? '−' : '+'}</span>
+              </h3>
+              <ul className={`footer-links ${expandedSection === 'shop' ? 'expanded' : ''}`}>
+                {categories.map((category) => (
+                  <li key={category.title}>
+                    <Link to={getCategoryUrl(category.title)}>{category.title}</Link>
+                  </li>
+                ))}
+                <li><Link to="/products?gender=Male">For Him</Link></li>
+                <li><Link to="/products?gender=Female">For Her</Link></li>
+              </ul>
+            </div>
+            <div className="footer-section">
+              <h3 
+                className="footer-heading"
+                onClick={() => toggleSection('company')}
+              >
+                Company
+                <span className="footer-toggle-icon">{expandedSection === 'company' ? '−' : '+'}</span>
+              </h3>
+              <ul className={`footer-links ${expandedSection === 'company' ? 'expanded' : ''}`}>
+                <li><Link to="/about">About</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
+                <li><Link to="/feedback">Feedback</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="footer-divider"></div>
+          <div className="footer-right">
+            <div className="footer-logo-social">
+              <img 
+                src="/images/logo.png" 
+                alt="Mistiq Perfumeries Logo" 
+                className="footer-logo"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+              <p className="footer-brand-name">Mistiq Perfumeries</p>
+              <div className="footer-social">
+                <SocialMediaLinks showQR={true} compact={true} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p className="footer-copyright">© 2025 Mistiq Perfumeries — Unveil your essence.</p>
+    </footer>
+  );
+};
 
 const Layout = ({ children }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
+  const productsDropdownRef = useRef(null);
   const { user, logout } = useAuth();
   const { getCartCount } = useCart();
   const navigate = useNavigate();
@@ -20,6 +115,20 @@ const Layout = ({ children }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (productsDropdownRef.current && !productsDropdownRef.current.contains(event.target)) {
+        setProductsDropdownOpen(false);
+      }
+    };
+
+    if (productsDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [productsDropdownOpen]);
 
   const handleLogout = () => {
     logout();
@@ -94,7 +203,42 @@ const Layout = ({ children }) => {
 
           <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
             <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
-            <li><Link to="/products" onClick={closeMobileMenu}>Products</Link></li>
+            <li 
+              className="nav-products-item"
+              ref={productsDropdownRef}
+              onMouseEnter={() => {
+                if (window.innerWidth > 768) {
+                  setProductsDropdownOpen(true);
+                }
+              }}
+              onMouseLeave={() => {
+                if (window.innerWidth > 768) {
+                  setProductsDropdownOpen(false);
+                }
+              }}
+            >
+              <button
+                className="nav-products-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (window.innerWidth <= 768) {
+                    setProductsDropdownOpen(!productsDropdownOpen);
+                  } else {
+                    navigate('/products');
+                  }
+                }}
+              >
+                Products
+                <span className="nav-products-arrow">{productsDropdownOpen ? '−' : '+'}</span>
+              </button>
+              <ProductsDropdown 
+                isOpen={productsDropdownOpen} 
+                onClose={() => {
+                  setProductsDropdownOpen(false);
+                  closeMobileMenu();
+                }}
+              />
+            </li>
             <li><Link to="/about" onClick={closeMobileMenu}>About</Link></li>
             <li><Link to="/contact" onClick={closeMobileMenu}>Contact</Link></li>
             <li><Link to="/feedback" onClick={closeMobileMenu}>Feedback</Link></li>
@@ -118,22 +262,7 @@ const Layout = ({ children }) => {
         </div>
       </nav>
       <main>{children}</main>
-      <footer className="footer">
-        <div className="footer-content">
-          <img 
-            src="/images/logo.png" 
-            alt="Mistiq Perfumeries Logo" 
-            className="footer-logo"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
-          />
-          <p>© 2025 Mistiq Perfumeries — Unveil your essence.</p>
-          <div className="footer-social">
-            <SocialMediaLinks showQR={true} compact={true} />
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

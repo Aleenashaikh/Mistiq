@@ -1,26 +1,25 @@
 .auth-page {
   padding-top: 120px;
   min-height: 100vh;
-  background: var(--black);
+  background: var(--cream);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
 }
 
 .auth-container {
   max-width: 500px;
   width: 100%;
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 2rem;
+  background: var(--white);
+  border: 1px solid var(--beige);
 }
 
 .auth-logo-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .auth-logo {
@@ -36,20 +35,21 @@
 
 .auth-container h1 {
   font-size: 2.5rem;
+  font-family: var(--font-heading);
+  font-weight: 300;
+  color: var(--black);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, var(--white), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   text-align: center;
+  letter-spacing: 2px;
 }
 
 .auth-subtitle {
   text-align: center;
-  color: var(--white);
-  opacity: 0.8;
-  margin-bottom: 2rem;
+  color: var(--charcoal);
+  margin-bottom: 1.5rem;
   line-height: 1.6;
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .auth-form {
@@ -65,72 +65,82 @@
 }
 
 .form-group label {
-  color: var(--white);
-  font-weight: 600;
+  color: var(--charcoal);
+  font-weight: 400;
   font-size: 0.95rem;
+  font-family: var(--font-body);
+  letter-spacing: 0.5px;
 }
 
 .form-group input {
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 8px;
-  color: var(--white);
+  background: var(--white);
+  border: 1px solid var(--beige);
+  color: var(--black);
   font-family: var(--font-body);
   font-size: 1rem;
+  font-weight: 300;
+  transition: border-color 0.3s ease;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+  border-color: var(--charcoal);
 }
 
 .auth-btn {
-  padding: 1.2rem 2rem;
-  background: transparent;
-  border: 2px solid var(--off-white);
-  color: var(--off-white);
-  font-weight: 600;
-  font-size: 1rem;
+  padding: 1rem 2rem;
+  background: var(--black);
+  border: 1px solid var(--black);
+  color: var(--white);
+  font-weight: 400;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  border-radius: 50px;
   transition: all 0.3s ease;
   margin-top: 1rem;
+  font-family: var(--font-body);
+  cursor: pointer;
 }
 
-.auth-btn:hover {
-  background: var(--off-white);
+.auth-btn:hover:not(:disabled) {
+  background: var(--white);
   color: var(--black);
-  transform: translateY(-2px);
+}
+
+.auth-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .auth-link {
   text-align: center;
-  color: var(--white);
-  opacity: 0.8;
+  color: var(--charcoal);
   margin-top: 1rem;
+  font-weight: 300;
+  font-family: var(--font-body);
 }
 
 .auth-link a {
-  color: var(--off-white);
-  font-weight: 600;
+  color: var(--black);
+  font-weight: 400;
   text-decoration: underline;
 }
 
 .auth-link a:hover {
-  color: #f4d03f;
+  color: var(--charcoal);
 }
 
 .error-message {
-  background: rgba(220, 53, 69, 0.1);
-  border: 1px solid #dc3545;
-  color: #dc3545;
+  background: var(--white);
+  border: 1px solid var(--beige);
+  color: var(--charcoal);
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 0;
   margin-bottom: 1.5rem;
   text-align: center;
+  font-family: var(--font-body);
+  font-weight: 300;
 }
 
 .loading-screen {
@@ -138,23 +148,26 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: var(--black);
-  color: var(--off-white);
+  background: var(--cream);
+  color: var(--charcoal);
   font-size: 1.2rem;
+  font-family: var(--font-body);
+  font-weight: 300;
 }
 
 .back-to-site {
   display: inline-block;
   margin-bottom: 2rem;
-  color: var(--off-white);
-  font-weight: 600;
+  color: var(--charcoal);
+  font-weight: 400;
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 0.95rem;
+  font-family: var(--font-body);
 }
 
 .back-to-site:hover {
-  color: #f4d03f;
+  color: var(--black);
   text-decoration: underline;
 }
 
@@ -180,4 +193,3 @@
     height: 60px;
   }
 }
-
