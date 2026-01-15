@@ -22,49 +22,7 @@ const ProductDetail = () => {
   const [touchEnd, setTouchEnd] = useState(null);
   const [productFeedbacks, setProductFeedbacks] = useState([]);
   const [feedbacksLoading, setFeedbacksLoading] = useState(true);
-  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [packagingExpanded, setPackagingExpanded] = useState(false);
-
-  // Helper function to get small description
-  const getSmallDescription = (description) => {
-    if (!description || description.trim() === '') {
-      return 'Discover this exquisite fragrance that captures the essence of luxury.';
-    }
-    
-    // Split by sentence endings
-    const sentences = description.split(/[.!?]+/).filter(s => s.trim().length > 0);
-    
-    if (sentences.length === 0) return description.substring(0, 100).trim() + (description.length > 100 ? '...' : '');
-    
-    // Try first sentence
-    let text = sentences[0].trim();
-    let wordCount = text.split(/\s+/).length;
-    
-    if (wordCount >= 10) {
-      return text + '.';
-    }
-    
-    // Try first two sentences
-    if (sentences.length >= 2) {
-      text = sentences.slice(0, 2).join('. ').trim();
-      wordCount = text.split(/\s+/).length;
-      if (wordCount >= 10) {
-        return text + '.';
-      }
-    }
-    
-    // Try first three sentences
-    if (sentences.length >= 3) {
-      text = sentences.slice(0, 3).join('. ').trim();
-      wordCount = text.split(/\s+/).length;
-      if (wordCount >= 10) {
-        return text + '.';
-      }
-    }
-    
-    // If still less than 10 words, return first three sentences or all if less than 3
-    return sentences.slice(0, 3).join('. ').trim() + '.';
-  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -294,116 +252,70 @@ const ProductDetail = () => {
             </div>
           )}
 
-          {/* Small Description - shown when description dropdown is closed */}
-          {!descriptionExpanded && (
-            <>
-              <p className="product-description-small">{getSmallDescription(product.description)}</p>
-              
-              {/* Top Notes Only */}
-              {product.topNotes && product.topNotes.length > 0 && (
-                <div className="top-notes-preview">
-                  <h4>Top Notes</h4>
-                  <div className="notes-list">
-                    {product.topNotes.map((note, idx) => (
-                      <span key={idx} className="note-tag">{note}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Quantity Selector with +/- buttons */}
-              <div className="quantity-selector">
-                <label>Quantity:</label>
-                <div className="quantity-controls">
-                  <button
-                    className="quantity-btn"
-                    onClick={() => handleQuantityChange(-1)}
-                    disabled={quantity <= 1 || product.stock === 0}
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min="1"
-                    max={product.stock}
-                    value={quantity}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 1;
-                      if (val >= 1 && val <= product.stock) {
-                        setQuantity(val);
-                      }
-                    }}
-                    disabled={product.stock === 0}
-                  />
-                  <button
-                    className="quantity-btn"
-                    onClick={() => handleQuantityChange(1)}
-                    disabled={quantity >= product.stock || product.stock === 0}
-                  >
-                    +
-                  </button>
-                </div>
+          {/* Full Description */}
+          {product.description && (
+            <p className="product-description-small">{product.description}</p>
+          )}
+          
+          {/* Top Notes Only */}
+          {product.topNotes && product.topNotes.length > 0 && (
+            <div className="top-notes-preview">
+              <h4>Top Notes</h4>
+              <div className="notes-list">
+                {product.topNotes.map((note, idx) => (
+                  <span key={idx} className="note-tag">{note}</span>
+                ))}
               </div>
-
-              {/* Add to Bag Button */}
-              <div className="product-actions-detail">
-                <button 
-                  className="add-to-bag-btn"
-                  onClick={handleAddToCart}
-                  disabled={product.stock === 0}
-                >
-                  {product.stock === 0 ? 'Sold Out' : 'Add to Bag'}
-                </button>
-              </div>
-            </>
+            </div>
           )}
 
-          {/* Expandable Sections - Description and Packaging */}
-          <div className="expandable-sections-group">
-            <div className="expandable-section">
+          {/* Quantity Selector with +/- buttons */}
+          <div className="quantity-selector">
+            <label>Quantity:</label>
+            <div className="quantity-controls">
               <button
-                className="expandable-header"
-                onClick={() => setDescriptionExpanded(!descriptionExpanded)}
+                className="quantity-btn"
+                onClick={() => handleQuantityChange(-1)}
+                disabled={quantity <= 1 || product.stock === 0}
               >
-                <span>Description</span>
-                <span className="expand-icon">{descriptionExpanded ? '−' : '+'}</span>
+                −
               </button>
-              {descriptionExpanded && (
-                <div className="expandable-content">
-                  <p className="product-description-full">{product.description}</p>
-                  <div className="notes-section">
-                    <h3>Fragrance Notes</h3>
-                    <div className="notes-grid">
-                      <div className="note-group">
-                        <h4>Top Notes</h4>
-                        <div className="notes-list">
-                          {product.topNotes?.map((note, idx) => (
-                            <span key={idx} className="note-tag">{note}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="note-group">
-                        <h4>Heart Notes</h4>
-                        <div className="notes-list">
-                          {product.heartNotes?.map((note, idx) => (
-                            <span key={idx} className="note-tag">{note}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="note-group">
-                        <h4>Base Notes</h4>
-                        <div className="notes-list">
-                          {product.baseNotes?.map((note, idx) => (
-                            <span key={idx} className="note-tag">{note}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              <input
+                type="number"
+                min="1"
+                max={product.stock}
+                value={quantity}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || 1;
+                  if (val >= 1 && val <= product.stock) {
+                    setQuantity(val);
+                  }
+                }}
+                disabled={product.stock === 0}
+              />
+              <button
+                className="quantity-btn"
+                onClick={() => handleQuantityChange(1)}
+                disabled={quantity >= product.stock || product.stock === 0}
+              >
+                +
+              </button>
             </div>
+          </div>
 
+          {/* Add to Bag Button */}
+          <div className="product-actions-detail">
+            <button 
+              className="add-to-bag-btn"
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+            >
+              {product.stock === 0 ? 'Sold Out' : 'Add to Bag'}
+            </button>
+          </div>
+
+          {/* Expandable Sections - Packaging */}
+          <div className="expandable-sections-group">
             <div className="expandable-section">
               <button
                 className="expandable-header"

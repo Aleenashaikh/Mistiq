@@ -146,6 +146,13 @@
   margin-top: 2rem;
 }
 
+/* Hide categories section on desktop view only */
+@media (min-width: 769px) {
+  .dropdown-categories-section {
+    display: none;
+  }
+}
+
 .categories-divider {
   height: 1px;
   background: var(--beige);
@@ -337,7 +344,8 @@
     top: 0;
     left: 0;
     right: 0;
-    max-height: 70vh;
+    max-height: none;
+    overflow: visible;
     border-top: none;
     border-left: 2px solid rgba(0, 0, 0, 0.1);
     margin: 0;
@@ -349,6 +357,8 @@
 
   .dropdown-content {
     padding: 1rem;
+    overflow: visible;
+    max-height: none;
   }
 
   .dropdown-main-title {

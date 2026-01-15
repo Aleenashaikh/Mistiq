@@ -73,8 +73,8 @@
 }
 
 .checkout-btn:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--black);
+  color: var(--white);
 }
 
 .cart-content {
@@ -206,9 +206,13 @@
   justify-content: space-between;
   padding: 0.8rem 0;
   border-bottom: 1px solid var(--beige);
-  color: var(--charcoal);
+  color: var(--black);
   font-family: var(--font-body);
   font-weight: 300;
+}
+
+.summary-row span {
+  color: var(--black);
 }
 
 .summary-row.total {

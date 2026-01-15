@@ -56,6 +56,7 @@ const ProductCard = ({ product }) => {
             <span className="category-product-gender">{product.gender}</span>
             <span className="category-product-size">50 mL</span>
           </div>
+          <div style={{ fontSize: '1.2rem', fontWeight: '700', color: 'var(--black)', letterSpacing: '1px', margin: '0', lineHeight: '1.4' }}>{product.name}</div>
           <div className="category-product-separator"></div>
           <div className="category-product-price-section">
             <div className="category-product-price">

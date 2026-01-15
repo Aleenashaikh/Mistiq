@@ -438,7 +438,7 @@
 
 .quantity-selector label {
   font-weight: 600;
-  color: var(--white);
+  color: var(--black);
 }
 
 .quantity-controls {

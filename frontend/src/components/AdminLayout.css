@@ -42,7 +42,7 @@
 }
 
 .sidebar-header p {
-  color: var(--white);
+  color: var(--black);
   opacity: 0.6;
   font-size: 0.85rem;
 }
@@ -55,7 +55,7 @@
 .nav-item {
   display: block;
   padding: 1rem 1.5rem;
-  color: var(--white);
+  color: var(--black);
   text-decoration: none;
   transition: all 0.3s ease;
   border-left: 3px solid transparent;
@@ -64,19 +64,19 @@
 .nav-item:hover {
   background: rgba(212, 175, 55, 0.1);
   border-left-color: var(--gold);
-  color: var(--off-white);
+  color: var(--black);
 }
 
 .nav-item.active {
   background: rgba(212, 175, 55, 0.15);
   border-left-color: var(--gold);
-  color: var(--off-white);
+  color: var(--black);
 }
 
 .nav-item.website-link {
   background: rgba(212, 175, 55, 0.1);
   border-left-color: var(--gold);
-  color: var(--off-white);
+  color: var(--black);
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -95,13 +95,13 @@
 }
 
 .user-info p {
-  color: var(--white);
+  color: var(--black);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
 
 .user-info small {
-  color: var(--white);
+  color: var(--black);
   opacity: 0.6;
   font-size: 0.85rem;
 }
