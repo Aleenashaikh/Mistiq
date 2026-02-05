@@ -19,7 +19,7 @@ const ProductsDropdown = ({ isOpen, onClose }) => {
     },
     {
       title: 'Fresh & Modern',
-      products: ['oro blue', 'eloria', 'morgan']
+      products: ['oro blue', 'eloria']
     },
     {
       title: 'Floral & Romantic',

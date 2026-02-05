@@ -13,7 +13,7 @@ const Footer = () => {
   const categories = [
     { title: 'Best Seller', products: ['morgan', 'inferno', 'eloria'] },
     { title: 'Bold & Intense', products: ['morgan', 'inferno'] },
-    { title: 'Fresh & Modern', products: ['oro blue', 'eloria', 'morgan'] },
+    { title: 'Fresh & Modern', products: ['oro bleu', 'eloria'] },
     { title: 'Floral & Romantic', products: ['eloria', 'La Fleure'] }
   ];
 

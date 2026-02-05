@@ -102,7 +102,7 @@ const ProductCategories = () => {
     },
     {
       title: 'Fresh & Modern',
-      products: ['oro blue', 'eloria', 'morgan']
+      products: ['oro bleu', 'eloria']
     },
     {
       title: 'Floral & Romantic',
