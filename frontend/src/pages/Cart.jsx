@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useDiscount } from '../context/DiscountContext';
 import axios from '../config/axios';
 import './Cart.css';
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const { qrDiscount } = useDiscount();
   const [deliveryCharge, setDeliveryCharge] = useState(200);
 
   useEffect(() => {
@@ -21,7 +23,9 @@ const Cart = () => {
     fetchDeliveryCharge();
   }, []);
 
-  const total = getCartTotal() + deliveryCharge;
+  const subtotal = getCartTotal();
+  const discountAmount = qrDiscount ? subtotal * 0.10 : 0;
+  const total = subtotal - discountAmount + deliveryCharge;
 
   return (
     <div className="cart-page">
@@ -37,8 +41,8 @@ const Cart = () => {
             <div className="cart-items">
               {cartItems.map((item) => (
                 <div key={item.product._id} className="cart-item">
-                  <img 
-                    src={item.product.bottleImage || '/images/perfumes/placeholder.jpg'} 
+                  <img
+                    src={item.product.bottleImage || '/images/perfumes/placeholder.jpg'}
                     alt={item.product.name}
                     className="cart-item-image"
                   />
@@ -57,7 +61,7 @@ const Cart = () => {
                   </div>
                   <div className="cart-item-total">
                     <p>Rs {(item.product.price * item.quantity).toFixed(2)}</p>
-                    <button 
+                    <button
                       className="remove-btn"
                       onClick={() => removeFromCart(item.product._id)}
                     >
@@ -68,10 +72,21 @@ const Cart = () => {
               ))}
             </div>
             <div className="cart-summary">
+              {qrDiscount && (
+                <div className="cart-qr-badge">
+                  🎉 QR Discount Active &mdash; 10% OFF at Checkout!
+                </div>
+              )}
               <div className="summary-row">
                 <span>Subtotal:</span>
-                <span>Rs {getCartTotal().toFixed(2)}</span>
+                <span>Rs {subtotal.toFixed(2)}</span>
               </div>
+              {qrDiscount && (
+                <div className="summary-row cart-discount-row">
+                  <span>🎟️ QR Discount (10%):</span>
+                  <span className="cart-discount-amount">- Rs {discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div className="summary-row">
                 <span>Delivery Charge:</span>
                 <span>Rs {deliveryCharge}</span>

@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import axios from '../config/axios';
+import { useDiscount } from '../context/DiscountContext';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -11,6 +12,7 @@ const Checkout = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { qrDiscount, clearDiscount } = useDiscount();
   const [loading, setLoading] = useState(false);
   const [deliveryCharge, setDeliveryCharge] = useState(200);
   const [formData, setFormData] = useState({
@@ -39,7 +41,8 @@ const Checkout = () => {
   }, []);
 
   const subtotal = getCartTotal();
-  const total = subtotal + deliveryCharge;
+  const discountAmount = qrDiscount ? subtotal * 0.10 : 0;
+  const total = subtotal - discountAmount + deliveryCharge;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,7 +50,7 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (cartItems.length === 0) {
       showToast('Your cart is empty!', 'error');
       return;
@@ -74,6 +77,7 @@ const Checkout = () => {
           nearestLandmark: formData.nearestLandmark,
         },
         paymentMethod: 'COD',
+        qrDiscount: qrDiscount,
       };
 
       // Create axios instance without auth header for orders (no login required)
@@ -82,8 +86,9 @@ const Checkout = () => {
         baseURL: axios.defaults.baseURL, // Explicitly set to ensure baseURL is used
       });
       const response = await orderAxios.post('/api/orders', orderData);
-      
+
       clearCart();
+      clearDiscount();
       showToast('Order placed successfully! You will receive a confirmation email shortly.', 'success');
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
@@ -112,7 +117,7 @@ const Checkout = () => {
         <p className="checkout-intro">
           Fill in your details and get ready to unveil your essence with every moment.
         </p>
-        
+
         <div className="checkout-layout">
           <form className="checkout-form" onSubmit={handleSubmit}>
             <div className="form-section">
@@ -120,29 +125,29 @@ const Checkout = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label>First Name *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    required 
+                    required
                   />
                 </div>
                 <div className="form-group">
                   <label>Last Name *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    required 
+                    required
                   />
                 </div>
               </div>
               <div className="form-group">
                 <label>Email (Optional)</label>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
@@ -150,53 +155,53 @@ const Checkout = () => {
               </div>
               <div className="form-group">
                 <label>Phone Number (Pakistan) *</label>
-                <input 
-                  type="tel" 
+                <input
+                  type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="03XXXXXXXXX"
                   pattern="[0-9]{11}"
-                  required 
+                  required
                 />
                 <small>Format: 03XXXXXXXXX (11 digits)</small>
               </div>
               <div className="form-group">
                 <label>Address *</label>
-                <textarea 
+                <textarea
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   rows="3"
-                  required 
+                  required
                 />
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label>City *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
-                    required 
+                    required
                   />
                 </div>
                 <div className="form-group">
                   <label>State/Province *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    required 
+                    required
                   />
                 </div>
               </div>
               <div className="form-group">
                 <label>Postal Code (Optional)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="postalCode"
                   value={formData.postalCode}
                   onChange={handleChange}
@@ -204,8 +209,8 @@ const Checkout = () => {
               </div>
               <div className="form-group">
                 <label>Nearest Landmark (Optional)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="nearestLandmark"
                   value={formData.nearestLandmark}
                   onChange={handleChange}
@@ -213,7 +218,7 @@ const Checkout = () => {
                 />
               </div>
             </div>
-            
+
             <div className="form-section">
               <h2>Payment Method</h2>
               <div className="payment-method">
@@ -222,8 +227,8 @@ const Checkout = () => {
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="place-order-btn"
               disabled={loading}
             >
@@ -233,6 +238,11 @@ const Checkout = () => {
 
           <div className="order-summary">
             <h2>Order Summary</h2>
+            {qrDiscount && (
+              <div className="qr-discount-badge">
+                🎉 QR Code Discount Applied &mdash; 10% OFF!
+              </div>
+            )}
             <div className="summary-items">
               {cartItems.map((item) => (
                 <div key={item.product._id} className="summary-item">
@@ -246,6 +256,12 @@ const Checkout = () => {
                 <span>Subtotal:</span>
                 <span>Rs {subtotal.toFixed(2)}</span>
               </div>
+              {qrDiscount && (
+                <div className="summary-row discount-row">
+                  <span>🎟️ QR Discount (10%):</span>
+                  <span className="discount-amount">- Rs {discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               <div className="summary-row">
                 <span>Delivery Charge:</span>
                 <span>Rs {deliveryCharge}</span>

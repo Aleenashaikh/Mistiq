@@ -61,31 +61,39 @@ const orderSchema = new mongoose.Schema({
   notes: {
     type: String,
   },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+  discountApplied: {
+    type: Boolean,
+    default: false,
+  },
 }, {
   timestamps: true,
 });
 
 // Generate order number before saving (6 random alphanumeric characters)
-orderSchema.pre('save', async function(next) {
+orderSchema.pre('save', async function (next) {
   if (!this.orderNumber) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let orderNumber = '';
     let isUnique = false;
-    
+
     // Keep generating until we get a unique order number
     while (!isUnique) {
       orderNumber = '';
       for (let i = 0; i < 6; i++) {
         orderNumber += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      
+
       // Check if this order number already exists
       const existingOrder = await mongoose.model('Order').findOne({ orderNumber });
       if (!existingOrder) {
         isUnique = true;
       }
     }
-    
+
     this.orderNumber = orderNumber;
   }
   next();

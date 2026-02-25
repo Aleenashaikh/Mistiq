@@ -10,30 +10,37 @@ const router = express.Router();
 // Create order (no authentication required)
 router.post('/', async (req, res) => {
   try {
-    const { items, shippingAddress, paymentMethod = 'COD' } = req.body;
-    
+    const { items, shippingAddress, paymentMethod = 'COD', qrDiscount = false } = req.body;
+
     // Validate items and check stock
     let totalAmount = 0;
     const settings = await Settings.getSettings();
     const DELIVERY_CHARGE = settings.deliveryCharge;
-    
+
     for (const item of items) {
       const product = await Product.findById(item.product);
       if (!product) {
         return res.status(400).json({ message: `Product ${item.product} not found` });
       }
-      
+
       if (product.stock < item.quantity) {
-        return res.status(400).json({ 
-          message: `Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}` 
+        return res.status(400).json({
+          message: `Insufficient stock for ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}`
         });
       }
-      
+
       totalAmount += item.price * item.quantity;
     }
-    
+
+    // Apply QR code discount (10% off subtotal)
+    let discountAmount = 0;
+    if (qrDiscount === true) {
+      discountAmount = totalAmount * 0.10;
+      totalAmount = totalAmount - discountAmount;
+    }
+
     totalAmount += DELIVERY_CHARGE; // Add delivery charge
-    
+
     // Try to get user from token if provided, otherwise null
     let userId = null;
     try {
@@ -47,40 +54,41 @@ router.post('/', async (req, res) => {
     } catch (error) {
       // No user, continue without user
     }
-    
+
     // Generate order number first
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let orderNumber = '';
     let isUnique = false;
-    
+
     // Keep generating until we get a unique order number
     while (!isUnique) {
       orderNumber = '';
       for (let i = 0; i < 6; i++) {
         orderNumber += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      
+
       // Check if this order number already exists
       const existingOrder = await Order.findOne({ orderNumber });
       if (!existingOrder) {
         isUnique = true;
       }
     }
-    
-    // Create order
+
     const order = new Order({
       orderNumber, // Set it explicitly
       items,
       shippingAddress,
       totalAmount,
+      discount: discountAmount,
+      discountApplied: qrDiscount === true,
       paymentMethod: 'COD', // Always COD
       paymentStatus: 'pending',
       status: 'pending',
       user: userId || undefined, // Optional user
     });
-    
+
     await order.save();
-    
+
     // Decrease stock for each product
     for (const item of items) {
       await Product.findByIdAndUpdate(
@@ -88,20 +96,20 @@ router.post('/', async (req, res) => {
         { $inc: { stock: -item.quantity } }
       );
     }
-    
+
     // Populate order for email
     await order.populate('items.product');
     if (userId) {
       await order.populate('user', 'email');
     }
-    
+
     // Send emails (only if email is provided)
     await sendOrderNotificationToAdmin(order);
     const customerEmail = order.shippingAddress.email || order.user?.email;
     if (customerEmail) {
       await sendOrderConfirmationToCustomer(order, customerEmail);
     }
-    
+
     res.status(201).json(order);
   } catch (error) {
     console.error('Order creation error:', error);
@@ -115,7 +123,7 @@ router.get('/my-orders', authenticate, async (req, res) => {
     const orders = await Order.find({ user: req.user._id })
       .populate('items.product', 'name bottleImage price')
       .sort({ createdAt: -1 });
-    
+
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -129,11 +137,11 @@ router.get('/:id', authenticate, async (req, res) => {
       _id: req.params.id,
       user: req.user._id,
     }).populate('items.product');
-    
+
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
-    
+
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });

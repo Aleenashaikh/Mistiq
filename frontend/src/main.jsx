@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
+import { DiscountProvider } from './context/DiscountContext';
 import './config/axios'; // Initialize axios with baseURL
 import App from './App';
 import './index.css';
@@ -15,9 +16,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <ToastProvider>
-              <App />
-            </ToastProvider>
+            <DiscountProvider>
+              <ToastProvider>
+                <App />
+              </ToastProvider>
+            </DiscountProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>

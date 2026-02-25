@@ -225,6 +225,49 @@
   color: var(--black);
 }
 
+/* QR Discount — Cart */
+.cart-qr-badge {
+  background: linear-gradient(135deg, #1a6b3a, #27ae60);
+  color: #fff;
+  text-align: center;
+  padding: 0.65rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  animation: badgePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes badgePop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cart-discount-row {
+  background: rgba(39, 174, 96, 0.08);
+  border-radius: 4px;
+  padding: 0.6rem 0.5rem;
+  border-bottom: none !important;
+}
+
+.cart-discount-row span {
+  color: #1a6b3a;
+  font-weight: 500;
+}
+
+.cart-discount-amount {
+  color: #1a6b3a !important;
+  font-weight: 600 !important;
+}
+
 @media (max-width: 968px) {
   .cart-content {
     grid-template-columns: 1fr;
