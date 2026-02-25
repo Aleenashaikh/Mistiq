@@ -7,16 +7,21 @@ const settingsSchema = new mongoose.Schema({
     default: 200,
     min: 0,
   },
+  qrDiscountEnabled: {
+    type: Boolean,
+    default: false,
+  },
 }, {
   timestamps: true,
 });
 
 // Ensure only one settings document exists
-settingsSchema.statics.getSettings = async function() {
+settingsSchema.statics.getSettings = async function () {
   let settings = await this.findOne();
   if (!settings) {
     settings = new this({
       deliveryCharge: 200,
+      qrDiscountEnabled: false,
     });
     await settings.save();
   }

@@ -17,15 +17,15 @@ router.get('/orders/:id/delivery-slip', async (req, res) => {
     const order = await Order.findById(req.params.id)
       .populate('user', 'username email firstName lastName')
       .populate('items.product', 'name actualPrice discountedPrice');
-    
+
     if (!order) {
       return res.status(404).send('Order not found');
     }
-    
+
     // Calculate subtotal
     const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const deliveryCharge = order.totalAmount - subtotal;
-    
+
     // Generate HTML delivery slip
     const html = `
 <!DOCTYPE html>
@@ -248,7 +248,7 @@ router.get('/orders/:id/delivery-slip', async (req, res) => {
 </body>
 </html>
     `;
-    
+
     res.setHeader('Content-Type', 'text/html');
     res.setHeader('Content-Disposition', `inline; filename=delivery-slip-${order.orderNumber}.html`);
     res.send(html);
@@ -264,7 +264,10 @@ router.get('/orders/:id/delivery-slip', async (req, res) => {
 router.get('/settings', async (req, res) => {
   try {
     const settings = await Settings.getSettings();
-    res.json({ deliveryCharge: settings.deliveryCharge });
+    res.json({
+      deliveryCharge: settings.deliveryCharge,
+      qrDiscountEnabled: settings.qrDiscountEnabled,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -333,17 +336,17 @@ router.delete('/products/:id', async (req, res) => {
 router.get('/orders', async (req, res) => {
   try {
     const { status, customerId, startDate, endDate } = req.query;
-    
+
     let query = {};
-    
+
     if (status) {
       query.status = status;
     }
-    
+
     if (customerId) {
       query.user = customerId;
     }
-    
+
     if (startDate || endDate) {
       query.createdAt = {};
       if (startDate) {
@@ -353,12 +356,12 @@ router.get('/orders', async (req, res) => {
         query.createdAt.$lte = new Date(endDate);
       }
     }
-    
+
     const orders = await Order.find(query)
       .populate('user', 'username email firstName lastName')
       .populate('items.product', 'name bottleImage')
       .sort({ createdAt: -1 });
-    
+
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -369,37 +372,37 @@ router.get('/orders', async (req, res) => {
 router.get('/orders/export', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
-    
+
     let query = {};
-    
+
     // Only apply date filter if both dates are provided
     // If no dates selected, get all orders (query remains empty)
     if (startDate && endDate) {
       const start = new Date(startDate);
       start.setHours(0, 0, 0, 0);
-      
+
       const end = new Date(endDate);
       end.setHours(23, 59, 59, 999);
-      
+
       query.createdAt = {
         $gte: start,
         $lte: end
       };
     }
-    
+
     const orders = await Order.find(query)
       .populate('user', 'username email firstName lastName')
       .populate('items.product', 'name')
       .sort({ createdAt: -1 });
-    
+
     // Prepare data for Excel
     const excelData = orders.map(order => {
       const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       const deliveryCharge = order.totalAmount - subtotal;
-      const items = order.items.map(item => 
+      const items = order.items.map(item =>
         `${item.product?.name || 'N/A'} (Qty: ${item.quantity})`
       ).join('; ');
-      
+
       return {
         'Order Number': order.orderNumber,
         'Order Date': new Date(order.createdAt).toLocaleDateString(),
@@ -416,11 +419,11 @@ router.get('/orders/export', async (req, res) => {
         'Status': order.status
       };
     });
-    
+
     // Create workbook and worksheet
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(excelData);
-    
+
     // Set column widths
     const colWidths = [
       { wch: 15 }, // Order Number
@@ -438,17 +441,17 @@ router.get('/orders/export', async (req, res) => {
       { wch: 12 }  // Status
     ];
     ws['!cols'] = colWidths;
-    
+
     XLSX.utils.book_append_sheet(wb, ws, 'Orders');
-    
+
     // Generate buffer
     const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-    
+
     // Set headers
     const filename = `orders-export-${new Date().toISOString().split('T')[0]}.xlsx`;
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    
+
     res.send(buffer);
   } catch (error) {
     console.error('Error exporting orders:', error);
@@ -462,11 +465,11 @@ router.get('/orders/:id', async (req, res) => {
     const order = await Order.findById(req.params.id)
       .populate('user', 'username email firstName lastName')
       .populate('items.product');
-    
+
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
-    
+
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -482,11 +485,11 @@ router.put('/orders/:id/status', async (req, res) => {
       { status },
       { new: true }
     ).populate('user', 'email');
-    
+
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
-    
+
     res.json(order);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -499,7 +502,7 @@ router.put('/orders/:id/status', async (req, res) => {
 router.get('/analytics', async (req, res) => {
   try {
     const { startDate, endDate, year } = req.query;
-    
+
     let dateQuery = {};
     if (year) {
       // Filter by year
@@ -514,23 +517,23 @@ router.get('/analytics', async (req, res) => {
       if (startDate) dateQuery.createdAt.$gte = new Date(startDate);
       if (endDate) dateQuery.createdAt.$lte = new Date(endDate);
     }
-    
+
     // Total orders
     const totalOrders = await Order.countDocuments(dateQuery);
-    
+
     // Total revenue
     const revenueData = await Order.aggregate([
       { $match: dateQuery },
       { $group: { _id: null, total: { $sum: '$totalAmount' } } }
     ]);
     const totalRevenue = revenueData[0]?.total || 0;
-    
+
     // Orders by status
     const ordersByStatus = await Order.aggregate([
       { $match: dateQuery },
       { $group: { _id: '$status', count: { $sum: 1 } } }
     ]);
-    
+
     // Orders by date (for chart)
     const ordersByDate = await Order.aggregate([
       { $match: dateQuery },
@@ -543,7 +546,7 @@ router.get('/analytics', async (req, res) => {
       },
       { $sort: { _id: 1 } }
     ]);
-    
+
     // Top products
     const topProducts = await Order.aggregate([
       { $match: dateQuery },
@@ -558,7 +561,7 @@ router.get('/analytics', async (req, res) => {
       { $sort: { totalQuantity: -1 } },
       { $limit: 10 }
     ]);
-    
+
     // Populate product names
     const topProductsWithNames = await Promise.all(
       topProducts.map(async (item) => {
@@ -570,7 +573,7 @@ router.get('/analytics', async (req, res) => {
         };
       })
     );
-    
+
     // Monthly product breakdown for compound bar chart
     const monthlyProductData = await Order.aggregate([
       { $match: dateQuery },
@@ -587,11 +590,11 @@ router.get('/analytics', async (req, res) => {
       },
       { $sort: { '_id.month': 1 } }
     ]);
-    
+
     // Get all unique products and months
     const productMap = new Map();
     const monthSet = new Set();
-    
+
     for (const item of monthlyProductData) {
       monthSet.add(item._id.month);
       if (!productMap.has(item._id.product.toString())) {
@@ -599,14 +602,14 @@ router.get('/analytics', async (req, res) => {
         productMap.set(item._id.product.toString(), product?.name || 'Unknown');
       }
     }
-    
+
     // Transform data for chart
     const months = Array.from(monthSet).sort();
     const products = Array.from(productMap.values());
     const chartData = months.map(month => {
       const monthData = { month, totalRevenue: 0 };
       let monthTotalRevenue = 0;
-      
+
       monthlyProductData
         .filter(item => item._id.month === month)
         .forEach(item => {
@@ -617,7 +620,7 @@ router.get('/analytics', async (req, res) => {
           monthData[`${productName}_revenue`] = (monthData[`${productName}_revenue`] || 0) + item.revenue;
           monthTotalRevenue += item.revenue;
         });
-      
+
       // Ensure all products have a value (0 if not present)
       products.forEach(productName => {
         if (!(productName in monthData)) {
@@ -625,11 +628,11 @@ router.get('/analytics', async (req, res) => {
           monthData[`${productName}_revenue`] = 0;
         }
       });
-      
+
       monthData.totalRevenue = monthTotalRevenue;
       return monthData;
     });
-    
+
     res.json({
       totalOrders,
       totalRevenue,
@@ -653,7 +656,7 @@ router.get('/analytics', async (req, res) => {
 router.get('/hero', async (req, res) => {
   try {
     let hero = await HeroSection.findOne({ isActive: true });
-    
+
     if (!hero) {
       // Create default hero if none exists
       hero = new HeroSection({
@@ -665,7 +668,7 @@ router.get('/hero', async (req, res) => {
       });
       await hero.save();
     }
-    
+
     // Remove backgroundVideo from response - video is now static
     const { backgroundVideo, ...heroResponse } = hero.toObject();
     res.json(heroResponse);
@@ -678,19 +681,19 @@ router.get('/hero', async (req, res) => {
 router.put('/hero', async (req, res) => {
   try {
     let hero = await HeroSection.findOne({ isActive: true });
-    
+
     // Remove backgroundVideo from request body - video is now static
     const { backgroundVideo, ...heroData } = req.body;
-    
+
     if (!hero) {
       hero = new HeroSection(heroData);
       hero.isActive = true;
     } else {
       Object.assign(hero, heroData);
     }
-    
+
     await hero.save();
-    
+
     // Remove backgroundVideo from response
     const { backgroundVideo: _, ...heroResponse } = hero.toObject();
     res.json(heroResponse);
@@ -705,7 +708,7 @@ router.put('/hero', async (req, res) => {
 router.put('/announcement', async (req, res) => {
   try {
     let banner = await AnnouncementBanner.findOne();
-    
+
     if (!banner) {
       banner = new AnnouncementBanner({
         text: req.body.text || 'Opening Sale Live',
@@ -715,7 +718,7 @@ router.put('/announcement', async (req, res) => {
       if (req.body.text !== undefined) banner.text = req.body.text;
       if (req.body.isActive !== undefined) banner.isActive = req.body.isActive;
     }
-    
+
     await banner.save();
     res.json(banner);
   } catch (error) {
@@ -739,16 +742,35 @@ router.get('/settings/full', authenticate, isAdmin, async (req, res) => {
 router.put('/settings/delivery-charge', authenticate, isAdmin, async (req, res) => {
   try {
     const { deliveryCharge } = req.body;
-    
+
     if (deliveryCharge === undefined || deliveryCharge < 0) {
       return res.status(400).json({ message: 'Delivery charge must be a non-negative number' });
     }
-    
+
     const settings = await Settings.getSettings();
     settings.deliveryCharge = deliveryCharge;
     await settings.save();
-    
+
     res.json({ message: 'Delivery charge updated successfully', deliveryCharge: settings.deliveryCharge });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Toggle QR discount (admin only)
+router.patch('/settings/qr-discount', authenticate, isAdmin, async (req, res) => {
+  try {
+    const { qrDiscountEnabled } = req.body;
+    if (typeof qrDiscountEnabled !== 'boolean') {
+      return res.status(400).json({ message: 'qrDiscountEnabled must be a boolean' });
+    }
+    const settings = await Settings.getSettings();
+    settings.qrDiscountEnabled = qrDiscountEnabled;
+    await settings.save();
+    res.json({
+      message: `QR discount ${qrDiscountEnabled ? 'enabled' : 'disabled'} successfully`,
+      qrDiscountEnabled: settings.qrDiscountEnabled,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

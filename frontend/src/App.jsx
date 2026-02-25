@@ -22,6 +22,7 @@ import HeroEditor from './pages/admin/HeroEditor';
 import Settings from './pages/admin/Settings';
 import { useDiscount } from './context/DiscountContext';
 import { useToast } from './context/ToastContext';
+import axios from './config/axios';
 
 function App() {
   const [searchParams] = useSearchParams();
@@ -29,17 +30,26 @@ function App() {
   const { showToast } = useToast();
 
   useEffect(() => {
-    if (searchParams.get('ref') === 'qr') {
-      if (!qrDiscount) {
-        const activated = activateQrDiscount();
-        setTimeout(() => {
-          if (activated) {
-            showToast('🎉 10% QR discount applied to your order!', 'success');
-          } else {
-            showToast('❌ This QR discount has already been used. Each code can only be redeemed once.', 'error');
-          }
-        }, 500);
-      }
+    if (searchParams.get('ref') === 'qr' && !qrDiscount) {
+      // Check server-side flag before activating
+      axios.get('/api/admin/settings')
+        .then(({ data }) => {
+          setTimeout(() => {
+            if (!data.qrDiscountEnabled) {
+              showToast('🚫 QR discount is not currently active.', 'error');
+              return;
+            }
+            const activated = activateQrDiscount();
+            if (activated) {
+              showToast('🎉 10% QR discount applied to your order!', 'success');
+            } else {
+              showToast('❌ This QR discount has already been used. Each code can only be redeemed once.', 'error');
+            }
+          }, 500);
+        })
+        .catch(() => {
+          // If settings fetch fails, silently ignore
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
