@@ -85,27 +85,7 @@ const ProductsDropdown = ({ isOpen, onClose }) => {
               <div className="dropdown-loading">Loading...</div>
             ) : (
               <>
-                {/* View All Card - First */}
-                {products.length > 0 && (
-                  <Link 
-                    to="/products" 
-                    className="product-card view-all-card" 
-                    onClick={onClose}
-                  >
-                    <img 
-                      src={ '/images/split-section.png'} 
-                      alt="View All Products" 
-                      className="product-card-image"
-                      onError={(e) => {
-                        e.target.src = '/images/split-section.png';
-                      }}
-                    />
-                    <div className="product-card-overlay">
-                      <span className="view-all-label">View All</span>
-                      <span className="view-all-arrow">→</span>
-                    </div>
-                  </Link>
-                )}
+
 
                 {/* Product Cards */}
                 {products.map((product) => (
