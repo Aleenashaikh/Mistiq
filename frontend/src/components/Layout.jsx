@@ -203,8 +203,8 @@ const Layout = ({ children }) => {
 
           <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
             <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
-            <li 
-              className="nav-products-item"
+            <li
+              
               ref={productsDropdownRef}
               onMouseEnter={() => {
                 if (window.innerWidth > 768) {
@@ -217,21 +217,50 @@ const Layout = ({ children }) => {
                 }
               }}
             >
-              <button
-                className="nav-products-link"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (window.innerWidth <= 768) {
-                    setProductsDropdownOpen(!productsDropdownOpen);
-                  } else {
-                    navigate('/products');
-                  }
-                }}
-              >
-                Products
-              </button>
-              <ProductsDropdown 
-                isOpen={productsDropdownOpen} 
+              <div className="nav-products-row">
+                <Link
+                  to="/products"
+                  className="nav-products-link nav-products-text-link"
+                  onClick={() => {
+                    setProductsDropdownOpen(false);
+                    closeMobileMenu();
+                  }}
+                >
+                  Products
+                </Link>
+                <button
+                  type="button"
+                  className="nav-products-chevron"
+                  aria-expanded={productsDropdownOpen}
+                  aria-label={productsDropdownOpen ? 'Close products menu' : 'Open products menu'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (window.innerWidth <= 768) {
+                      setProductsDropdownOpen(!productsDropdownOpen);
+                    } else {
+                      setProductsDropdownOpen((open) => !open);
+                    }
+                  }}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={productsDropdownOpen ? 'nav-products-chevron-icon open' : 'nav-products-chevron-icon'}
+                    aria-hidden
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+              </div>
+              <ProductsDropdown
+                isOpen={productsDropdownOpen}
                 onClose={() => {
                   setProductsDropdownOpen(false);
                   closeMobileMenu();

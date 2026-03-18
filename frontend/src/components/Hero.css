@@ -1,60 +1,105 @@
+/* Clear fixed navbar */
+.hero--below-nav {
+  padding-top: var(--hero-nav-offset, 60px);
+  box-sizing: border-box;
+}
+
 .hero {
   position: relative;
   width: 100%;
-  height: 80vh;
-  min-height: 600px;
+  min-height: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   background: var(--cream);
 }
 
-.hero-video {
+.hero-video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 900;
+  max-height: min(52.5vw, 85vh);
+  margin: 0 auto;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-video-wrap .hero-aspect--loading {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .hero-video-wrap {
+    aspect-ratio: 800 / 900;
+    max-height: min(112.5vw, 90vh);
+  }
+}
+
+.hero-aspect--video.hero-aspect--loading {
+  min-height: 200px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(0, 0, 0, 0.04));
+}
+
+.hero-media-el,
+.hero-video,
+.hero-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+  z-index: 1;
 }
 
 .hero-video-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(245, 243, 240, 0.4) 0%,
-    rgba(245, 243, 240, 0.7) 100%
+    rgba(245, 243, 240, 0.35) 0%,
+    rgba(245, 243, 240, 0.65) 100%
   );
   z-index: 2;
+  pointer-events: none;
 }
 
 .hero-content {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: var(--hero-nav-offset, 80px);
   z-index: 3;
   text-align: center;
-  padding: 2rem;
+  padding: 1.5rem 1.25rem 2.5rem;
   max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  height: 100%;
-  padding-bottom: 4rem;
+  pointer-events: none;
+}
+
+.hero-content a,
+.hero-content button {
+  pointer-events: auto;
 }
 
 .hero-title {
-  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-size: clamp(2rem, 5vw, 5.5rem);
   font-weight: 300;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   background: linear-gradient(135deg, #d4af37, #000000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -65,78 +110,30 @@
 }
 
 .hero-subtitle {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-size: clamp(1rem, 2vw, 1.35rem);
   color: var(--charcoal);
-  opacity: 0.8;
-  margin-bottom: 2.5rem;
-  line-height: 1.8;
+  opacity: 0.88;
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
   font-weight: 300;
- 
 }
 
 .hero-buttons {
   display: flex;
   gap: 1.5rem;
   justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.btn {
-  padding: 1rem 2.5rem;
-  font-size: 0.85rem;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border-radius: 0;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary {
-  padding: 1rem 2.5rem;
-  background: transparent;
-  border: 1px solid var(--black);
-  color: var(--black);
-  box-shadow: none;
-}
-
-.btn-primary:hover {
-  background: var(--black);
-  color: var(--white);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--charcoal);
-  border: 1px solid var(--charcoal);
-  position: relative;
-}
-
-.btn-secondary:hover {
-  background: var(--charcoal);
-  color: var(--white);
-  border-color: var(--charcoal);
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {
-  .hero {
-    height: 80vh;
-    min-height: 500px;
+  .hero-content {
+    padding-bottom: 1.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
-  .hero-buttons {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .btn {
-    flex: 1;
-    min-width: 140px;
-    max-width: 200px;
+  .hero-title {
+    font-size: clamp(1.75rem, 7vw, 2.75rem);
   }
 }
-

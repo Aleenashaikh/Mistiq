@@ -56,14 +56,16 @@ router.get('/hero', async (req, res) => {
         title: 'Discover Scents That Tell Your Story',
         subtitle: 'Let your presence linger beautifully. Explore our handcrafted fragrances designed to match every personality.',
         backgroundImage: '',
+        heroDesktopMediaType: 'image',
+        heroDesktopImageUrl: '',
+        heroDesktopVideoUrl: '',
+        heroMobileMediaType: 'image',
+        heroMobileImageUrl: '',
+        heroMobileVideoUrl: '',
         primaryButtonText: 'Shop Now',
         secondaryButtonText: 'Explore Collection',
         isActive: true,
       };
-    } else {
-      // Remove backgroundVideo from response - video is now static
-      const { backgroundVideo, ...heroWithoutVideo } = hero;
-      hero = heroWithoutVideo;
     }
     
     res.json(hero);

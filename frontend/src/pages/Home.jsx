@@ -1,4 +1,5 @@
 import Hero from '../components/Hero';
+import HeroImagesSection from '../components/HeroImagesSection';
 import AnnouncementBanner from '../components/AnnouncementBanner';
 import ProductCategories from '../components/ProductCategories';
 import CircularSlider from '../components/CircularSlider';
@@ -16,6 +17,7 @@ const Home = () => {
       />
       <div className="home">
         <Hero />
+        <HeroImagesSection />
         <AnnouncementBanner />
         <ProductCategories />
         <CircularSlider />

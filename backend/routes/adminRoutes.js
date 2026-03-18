@@ -669,8 +669,7 @@ router.get('/hero', async (req, res) => {
       await hero.save();
     }
 
-    // Remove backgroundVideo from response - video is now static
-    const { backgroundVideo, ...heroResponse } = hero.toObject();
+    const heroResponse = hero.toObject();
     res.json(heroResponse);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -682,8 +681,7 @@ router.put('/hero', async (req, res) => {
   try {
     let hero = await HeroSection.findOne({ isActive: true });
 
-    // Remove backgroundVideo from request body - video is now static
-    const { backgroundVideo, ...heroData } = req.body;
+    const heroData = { ...req.body };
 
     if (!hero) {
       hero = new HeroSection(heroData);
@@ -694,9 +692,7 @@ router.put('/hero', async (req, res) => {
 
     await hero.save();
 
-    // Remove backgroundVideo from response
-    const { backgroundVideo: _, ...heroResponse } = hero.toObject();
-    res.json(heroResponse);
+    res.json(hero.toObject());
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
