@@ -17,8 +17,8 @@ const Home = () => {
       />
       <div className="home">
         <Hero />
-        <HeroImagesSection />
         <AnnouncementBanner />
+        <HeroImagesSection />
         <ProductCategories />
         <CircularSlider />
         <Feedbacks />
