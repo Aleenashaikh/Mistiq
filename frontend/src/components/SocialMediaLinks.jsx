@@ -3,7 +3,9 @@ import './SocialMediaLinks.css';
 const SocialMediaLinks = ({ showQR = true, compact = false }) => {
   const facebookUrl = 'https://www.facebook.com/share/1AXy4umRQy/?mibextid=wwXIfr';
   const instagramUrl = 'https://www.instagram.com/mistiqperfumeries?igsh=MWkyb2lyZmdlNm5pbQ%3D%3D&utm_source=qr';
-  const whatsappNumber = '923341406111';
+  const whatsappNumber = (
+    import.meta.env.VITE_WHATSAPP_NUMBER || '923341406111'
+  ).replace(/\D/g, '') || '923341406111';
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
 
   return (

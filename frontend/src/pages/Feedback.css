@@ -1,23 +1,25 @@
 .feedback-page {
   min-height: calc(100vh - 200px);
   background: var(--cream);
-  padding: 1rem 0;
+  /* Clear the fixed navbar so the heading isn’t clipped */
+  padding: calc(var(--hero-nav-offset, 72px) + 1.25rem) 0 2rem;
 }
 
 .feedback-hero {
   text-align: center;
-  padding: 2rem 1rem 1rem;
+  padding: 1.5rem 1rem 1rem;
   max-width: 800px;
   margin: 0 auto;
 }
 
 .feedback-hero h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-family: var(--font-heading);
-  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-family: 'League Spartan', var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
   color: var(--black);
-  margin-bottom: 1.5rem;
-  letter-spacing: 2px;
+  margin: 0 0 1.25rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .feedback-hero p {
@@ -37,7 +39,9 @@
 .feedback-form {
   background: var(--white);
   border: 1px solid var(--beige);
+  border-radius: 1.25rem;
   padding: 2rem;
+  box-shadow: var(--shadow-soft);
 }
 
 .form-group {
@@ -62,8 +66,9 @@
   padding: 1rem;
   background: var(--white);
   border: 1px solid var(--beige);
+  border-radius: 0.85rem;
   color: var(--black);
-  font-size: 1rem;
+  font-size: 16px; /* prevent iOS zoom */
   font-family: var(--font-body);
   font-weight: 300;
   transition: border-color 0.3s ease;
@@ -140,14 +145,15 @@
   padding: 1rem 2rem;
   background: var(--black);
   border: 1px solid var(--black);
+  border-radius: 999px;
   color: var(--white);
   font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: var(--font-body);
+  font-family: 'League Spartan', var(--font-body), system-ui, sans-serif;
 }
 
 .submit-button:hover:not(:disabled) {
@@ -177,8 +183,12 @@
 }
 
 @media (max-width: 768px) {
+  .feedback-page {
+    padding-top: calc(var(--hero-nav-offset, 64px) + 1rem);
+  }
+
   .feedback-hero {
-    padding: 1.5rem 1rem 1rem;
+    padding: 0.75rem 1rem 1rem;
   }
 
   .feedback-container {
@@ -197,12 +207,8 @@
 }
 
 @media (max-width: 480px) {
-  .feedback-hero {
-    padding: 2rem 1rem 1rem;
-  }
-
   .feedback-hero h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
 
   .feedback-hero p {
@@ -210,7 +216,7 @@
   }
 
   .feedback-form {
-    padding: 1.5rem;
+    padding: 1.25rem;
   }
 
   .star-button {

@@ -1,23 +1,30 @@
 .checkout-page {
-  padding-top: 120px;
+  padding-top: calc(var(--hero-nav-offset, 64px) + 0.5rem);
   min-height: 100vh;
   background: var(--cream);
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
+  overflow-x: hidden;
 }
 
 .checkout-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .checkout-container {
+    padding: 2rem;
+  }
 }
 
 .checkout-container h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  margin-bottom: 1rem;
+  font-size: clamp(1.65rem, 5vw, 3rem);
+  margin-bottom: 0.75rem;
   color: var(--black);
   font-family: var(--font-heading);
-  font-weight: 300;
-  letter-spacing: 2px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 .checkout-intro {
@@ -37,10 +44,11 @@
 }
 
 .form-section {
-  padding: 2rem;
+  padding: 1.5rem;
   background: var(--white);
-  border-radius: 0;
-  border: 1px solid var(--beige);
+  border-radius: 1.15rem;
+  border: none;
+  box-shadow: var(--shadow-soft);
 }
 
 .form-section h2 {
@@ -74,13 +82,15 @@
 
 .form-group input,
 .form-group textarea {
-  padding: 1rem;
+  padding: 0.9rem 1rem;
   background: var(--white);
   border: 1px solid var(--beige);
-  border-radius: 0;
+  border-radius: 0.85rem;
   color: var(--black);
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 16px !important;
+  min-height: 48px;
+  width: 100%;
 }
 
 .form-group input:focus,
@@ -97,19 +107,21 @@
 }
 
 .place-order-btn {
-  padding: 1.2rem 2.5rem;
-  background: transparent;
-  border: 1px solid var(--black);
-  color: var(--black);
-  font-weight: 400;
+  padding: 1.1rem 2rem;
+  background: var(--black);
+  border: none;
+  color: var(--white);
+  font-weight: 500;
   font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  border-radius: 0;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
   transition: all 0.3s ease;
   width: 100%;
+  min-height: 52px;
   font-family: var(--font-body);
   cursor: pointer;
+  box-shadow: var(--shadow-soft);
 }
 
 .place-order-btn:hover:not(:disabled) {

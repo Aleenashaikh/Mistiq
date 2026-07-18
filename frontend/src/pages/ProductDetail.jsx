@@ -355,6 +355,8 @@ const ProductDetail = () => {
                 className="quantity-btn"
                 onClick={() => handleQuantityChange(-1)}
                 disabled={quantity <= 1 || product.stock === 0}
+                type="button"
+                aria-label="Decrease quantity"
               >
                 −
               </button>
@@ -370,22 +372,41 @@ const ProductDetail = () => {
                   }
                 }}
                 disabled={product.stock === 0}
+                aria-label="Quantity"
               />
               <button
                 className="quantity-btn"
                 onClick={() => handleQuantityChange(1)}
                 disabled={quantity >= product.stock || product.stock === 0}
+                type="button"
+                aria-label="Increase quantity"
               >
                 +
               </button>
             </div>
           </div>
 
-          <div className="product-actions-detail">
+          <div className="product-actions-detail product-actions-detail--inline">
             <button
               className="add-to-bag-btn"
               onClick={handleAddToCart}
               disabled={product.stock === 0}
+              type="button"
+            >
+              {product.stock === 0 ? 'Sold Out' : 'Add to Bag'}
+            </button>
+          </div>
+
+          {/* Sticky mobile CTA bar */}
+          <div className="pdp-sticky-bar" aria-hidden={false}>
+            <div className="pdp-sticky-price">
+              <PriceDisplay product={product} />
+            </div>
+            <button
+              className="add-to-bag-btn pdp-sticky-cta"
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+              type="button"
             >
               {product.stock === 0 ? 'Sold Out' : 'Add to Bag'}
             </button>
