@@ -1,0 +1,132 @@
+.scent-finder {
+  width: 100%;
+  padding: 0 1rem 2.5rem;
+}
+
+.scent-finder-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at top right, rgba(201, 169, 97, 0.18), transparent 45%),
+    linear-gradient(160deg, #1a1a1a 0%, #2a2520 100%);
+  color: #faf8f5;
+  box-shadow: var(--shadow-lift);
+}
+
+@media (min-width: 768px) {
+  .scent-finder {
+    padding: 0 1.5rem 3.5rem;
+  }
+
+  .scent-finder-inner {
+    padding: 2.5rem 2.25rem;
+  }
+}
+
+.scent-finder-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 245, 0.55);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.scent-finder-copy h2 {
+  color: #faf8f5;
+  font-size: clamp(1.45rem, 3.5vw, 2rem);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.scent-finder-sub {
+  color: rgba(250, 248, 245, 0.72);
+  font-size: 0.95rem;
+  max-width: 32rem;
+  line-height: 1.55;
+  margin-bottom: 1.35rem;
+}
+
+.scent-mood-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+@media (min-width: 640px) {
+  .scent-mood-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+}
+
+.scent-mood-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  min-height: 72px;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #faf8f5;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.scent-mood-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(201, 169, 97, 0.45);
+  transform: translateY(-2px);
+}
+
+.scent-mood-chip--active {
+  background: rgba(201, 169, 97, 0.22);
+  border-color: #c9a961;
+  box-shadow: 0 0 0 1px rgba(201, 169, 97, 0.35);
+}
+
+.scent-mood-emoji {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.scent-mood-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.scent-finder-result {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .scent-finder-result {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.scent-result-title {
+  font-weight: 650;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+.scent-result-blurb {
+  color: rgba(250, 248, 245, 0.7);
+  font-size: 0.9rem;
+}

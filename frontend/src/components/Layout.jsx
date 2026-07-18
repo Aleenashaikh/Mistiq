@@ -1,9 +1,11 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
+import { Search, ShoppingBag, X, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import SocialMediaLinks from './SocialMediaLinks';
 import ProductsDropdown from './ProductsDropdown';
+import FloatingWhatsApp from './FloatingWhatsApp';
 import './Layout.css';
 
 // Footer component with categories
@@ -70,7 +72,6 @@ const Footer = () => {
               <ul className={`footer-links ${expandedSection === 'company' ? 'expanded' : ''}`}>
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
-                <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/feedback">Feedback</Link></li>
               </ul>
             </div>
@@ -109,6 +110,8 @@ const Layout = ({ children }) => {
   const { user, logout } = useAuth();
   const { getCartCount } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
+  const cartCount = getCartCount();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -117,6 +120,20 @@ const Layout = ({ children }) => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  // Close menus on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setProductsDropdownOpen(false);
+  }, [location.pathname, location.search]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -140,30 +157,62 @@ const Layout = ({ children }) => {
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
+    setProductsDropdownOpen(false);
+  };
+
+  const productsCloseTimer = useRef(null);
+
+  const openProductsMenu = () => {
+    if (productsCloseTimer.current) {
+      clearTimeout(productsCloseTimer.current);
+      productsCloseTimer.current = null;
+    }
+    setProductsDropdownOpen(true);
+  };
+
+  const scheduleCloseProductsMenu = () => {
+    if (productsCloseTimer.current) clearTimeout(productsCloseTimer.current);
+    productsCloseTimer.current = setTimeout(() => {
+      setProductsDropdownOpen(false);
+      productsCloseTimer.current = null;
+    }, 220);
+  };
+
+  useEffect(
+    () => () => {
+      if (productsCloseTimer.current) clearTimeout(productsCloseTimer.current);
+    },
+    []
+  );
+
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
   };
 
   return (
     <div className="layout">
-      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''} ${mobileMenuOpen ? 'menu-open' : ''}`}>
         <div className="nav-container">
-          {/* Mobile Menu Button */}
-          <button 
-            className="mobile-menu-btn"
+          <button
+            type="button"
+            className={`mobile-menu-btn ${mobileMenuOpen ? 'is-open' : ''}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
           >
-            <span className="hamburger">
-              <span></span>
-              <span></span>
-              <span></span>
+            <span className="hamburger" aria-hidden>
+              <span />
+              <span />
+              <span />
             </span>
           </button>
 
           <Link to="/" className="logo" onClick={closeMobileMenu}>
             {!logoError && (
-              <img 
-                src="/images/logo.png" 
-                alt="Mistiq Perfumeries Logo" 
+              <img
+                src="/images/logo.png"
+                alt="Mistiq Perfumeries"
                 className="logo-image"
                 onError={() => setLogoError(true)}
               />
@@ -176,123 +225,228 @@ const Layout = ({ children }) => {
             )}
           </Link>
 
-          {/* Mobile Cart Icon - Right Side */}
-          <Link to="/cart" className="mobile-cart-link" onClick={closeMobileMenu}>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
+          <div className="mobile-nav-actions">
+            <Link
+              to="/products"
+              className="mobile-search-link"
+              onClick={closeMobileMenu}
+              aria-label="Browse products"
             >
-              <circle cx="9" cy="21" r="1"></circle>
-              <circle cx="20" cy="21" r="1"></circle>
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
-            {getCartCount() > 0 && (
-              <span className="mobile-cart-count">{getCartCount()}</span>
-            )}
-          </Link>
+              <Search size={20} strokeWidth={2} />
+            </Link>
+            <Link
+              to="/cart"
+              className="mobile-cart-link"
+              onClick={closeMobileMenu}
+              aria-label="Cart"
+            >
+              <ShoppingBag size={21} strokeWidth={2} />
+              {cartCount > 0 && (
+                <span className="mobile-cart-count">{cartCount}</span>
+              )}
+            </Link>
+          </div>
 
-          {/* Mobile Menu Overlay */}
           {mobileMenuOpen && (
-            <div className="mobile-menu-overlay" onClick={closeMobileMenu}></div>
+            <button
+              type="button"
+              className="mobile-menu-overlay"
+              aria-label="Close menu"
+              onClick={closeMobileMenu}
+            />
           )}
 
-          <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
-            <li><Link to="/" onClick={closeMobileMenu}>Home</Link></li>
-            <li
-              
-              ref={productsDropdownRef}
-              onMouseEnter={() => {
-                if (window.innerWidth > 768) {
-                  setProductsDropdownOpen(true);
-                }
-              }}
-              onMouseLeave={() => {
-                if (window.innerWidth > 768) {
-                  setProductsDropdownOpen(false);
-                }
-              }}
-            >
-              <div className="nav-products-row">
+          <div className={`nav-panel ${mobileMenuOpen ? 'open' : ''}`}>
+            <div className="nav-panel-header">
+              <p className="nav-panel-label">Menu</p>
+              <button
+                type="button"
+                className="nav-panel-close"
+                onClick={closeMobileMenu}
+                aria-label="Close menu"
+              >
+                <X size={22} strokeWidth={2} />
+              </button>
+            </div>
+
+            <ul className="nav-links">
+              <li>
                 <Link
-                  to="/products"
-                  className="nav-products-link nav-products-text-link"
-                  onClick={() => {
+                  to="/"
+                  className={isActive('/') ? 'is-active' : ''}
+                  onClick={closeMobileMenu}
+                >
+                  Home
+                </Link>
+              </li>
+              <li
+                className="nav-products-item"
+                ref={productsDropdownRef}
+                onMouseEnter={() => {
+                  if (window.innerWidth > 768) openProductsMenu();
+                }}
+                onMouseLeave={() => {
+                  if (window.innerWidth > 768) scheduleCloseProductsMenu();
+                }}
+              >
+                <div className="nav-products-row">
+                  <Link
+                    to="/products"
+                    className={`nav-products-link nav-products-text-link ${
+                      isActive('/products') ? 'is-active' : ''
+                    }`}
+                    onClick={() => {
+                      setProductsDropdownOpen(false);
+                      closeMobileMenu();
+                    }}
+                  >
+                    Products
+                  </Link>
+                  <button
+                    type="button"
+                    className="nav-products-chevron"
+                    aria-expanded={productsDropdownOpen}
+                    aria-label={
+                      productsDropdownOpen
+                        ? 'Close products menu'
+                        : 'Open products menu'
+                    }
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (window.innerWidth <= 768) {
+                        setProductsDropdownOpen((open) => !open);
+                      } else {
+                        openProductsMenu();
+                      }
+                    }}
+                  >
+                    <ChevronDown
+                      size={18}
+                      strokeWidth={2}
+                      className={
+                        productsDropdownOpen
+                          ? 'nav-products-chevron-icon open'
+                          : 'nav-products-chevron-icon'
+                      }
+                    />
+                  </button>
+                </div>
+                <ProductsDropdown
+                  isOpen={productsDropdownOpen}
+                  onClose={() => {
                     setProductsDropdownOpen(false);
                     closeMobileMenu();
                   }}
+                />
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  className={isActive('/about') ? 'is-active' : ''}
+                  onClick={closeMobileMenu}
                 >
-                  Products
+                  About
                 </Link>
-                <button
-                  type="button"
-                  className="nav-products-chevron"
-                  aria-expanded={productsDropdownOpen}
-                  aria-label={productsDropdownOpen ? 'Close products menu' : 'Open products menu'}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (window.innerWidth <= 768) {
-                      setProductsDropdownOpen(!productsDropdownOpen);
-                    } else {
-                      setProductsDropdownOpen((open) => !open);
-                    }
-                  }}
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className={isActive('/contact') ? 'is-active' : ''}
+                  onClick={closeMobileMenu}
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={productsDropdownOpen ? 'nav-products-chevron-icon open' : 'nav-products-chevron-icon'}
-                    aria-hidden
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/feedback"
+                  className={isActive('/feedback') ? 'is-active' : ''}
+                  onClick={closeMobileMenu}
+                >
+                  Feedback
+                </Link>
+              </li>
+
+              <li className="nav-divider" aria-hidden />
+
+              <li className="desktop-nav-actions">
+                <Link
+                  to="/products"
+                  className="nav-icon-btn"
+                  aria-label="Browse products"
+                  onClick={closeMobileMenu}
+                >
+                  <Search size={18} strokeWidth={2} />
+                </Link>
+                <Link
+                  to="/cart"
+                  className="nav-icon-btn nav-cart-btn"
+                  aria-label="Cart"
+                  onClick={closeMobileMenu}
+                >
+                  <ShoppingBag size={18} strokeWidth={2} />
+                  {cartCount > 0 && (
+                    <span className="nav-cart-badge">{cartCount}</span>
+                  )}
+                </Link>
+              </li>
+
+              <li className="mobile-cart-menu-item">
+                <Link to="/cart" onClick={closeMobileMenu}>
+                  Cart
+                  {cartCount > 0 && (
+                    <span className="nav-inline-badge">{cartCount}</span>
+                  )}
+                </Link>
+              </li>
+
+              {user ? (
+                <>
+                  {user.role === 'admin' && (
+                    <li>
+                      <Link
+                        to="/admin/dashboard"
+                        className="admin-portal-link"
+                        onClick={closeMobileMenu}
+                      >
+                        Admin Portal
+                      </Link>
+                    </li>
+                  )}
+                  <li className="nav-user-row">
+                    <span className="user-name">{user.username}</span>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="logout-link"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <li>
+                  <Link
+                    to="/login"
+                    className={`nav-login-link ${
+                      isActive('/login') ? 'is-active' : ''
+                    }`}
+                    onClick={closeMobileMenu}
                   >
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </button>
-              </div>
-              <ProductsDropdown
-                isOpen={productsDropdownOpen}
-                onClose={() => {
-                  setProductsDropdownOpen(false);
-                  closeMobileMenu();
-                }}
-              />
-            </li>
-            <li><Link to="/about" onClick={closeMobileMenu}>About</Link></li>
-            <li><Link to="/contact" onClick={closeMobileMenu}>Contact</Link></li>
-            <li><Link to="/feedback" onClick={closeMobileMenu}>Feedback</Link></li>
-            <li className="mobile-cart-menu-item">
-              <Link to="/cart" onClick={closeMobileMenu}>
-                Cart {getCartCount() > 0 && `(${getCartCount()})`}
-              </Link>
-            </li>
-            {user ? (
-              <>
-                {user.role === 'admin' && (
-                  <li><Link to="/admin/dashboard" className="admin-portal-link" onClick={closeMobileMenu}>Admin Portal</Link></li>
-                )}
-                <li><span className="user-name">{user.username}</span></li>
-                <li><button onClick={handleLogout} className="logout-link">Logout</button></li>
-              </>
-            ) : (
-              <li><Link to="/login" onClick={closeMobileMenu}>Login</Link></li>
-            )}
-          </ul>
+                    Login
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
       </nav>
       <main>{children}</main>
       <Footer />
+      <FloatingWhatsApp />
     </div>
   );
 };

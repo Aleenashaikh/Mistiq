@@ -1,84 +1,143 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Soft luxury / modern D2C palette */
+    --background: 40 20% 97%;
+    --foreground: 0 0% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 12%;
+    --primary: 0 0% 12%;
+    --primary-foreground: 40 20% 98%;
+    --secondary: 40 14% 94%;
+    --secondary-foreground: 0 0% 12%;
+    --muted: 40 12% 93%;
+    --muted-foreground: 0 0% 42%;
+    --accent: 43 35% 92%;
+    --accent-foreground: 0 0% 12%;
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 12% 90%;
+    --input: 40 12% 88%;
+    --ring: 43 40% 55%;
+    --radius: 1rem;
+
+    /* Legacy CSS vars */
+    --cream: #FAF8F5;
+    --white: #FFFFFF;
+    --black: #1F1F1F;
+    --charcoal: #3A3A3A;
+    --gold: #C9A961;
+    --beige: #EDE9E3;
+    --taupe: #D4C5B0;
+    --black-dark: #1F1F1F;
+    --black-light: #FFFFFF;
+    --black-lighter: #FAF8F5;
+    --grey: #EDE9E3;
+    --off-white: #3A3A3A;
+    --ladies-pink: #d63384;
+    --ladies-purple: #6f42c1;
+    --font-heading: 'League Spartan', system-ui, sans-serif;
+    --font-body: 'League Spartan', system-ui, sans-serif;
+    --font-accent: 'League Spartan', system-ui, sans-serif;
+    --hero-nav-offset: 64px;
+    --shadow-soft: 0 4px 24px rgba(20, 20, 20, 0.06);
+    --shadow-lift: 0 12px 40px rgba(20, 20, 20, 0.1);
+  }
+
+  * {
+    @apply border-border;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'League Spartan', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.65;
+    overflow-x: hidden;
+    min-width: 0;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'League Spartan', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--black);
+    line-height: 1.15;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: clamp(1.75rem, 5vw, 3.25rem);
+  }
+
+  h2 {
+    font-size: clamp(1.35rem, 3.5vw, 2rem);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+    font-family: inherit;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
-:root {
-  /* Diptyque-inspired light, elegant palette */
-  --cream: #F5F3F0;        /* Main background - soft cream */
-  --white: #FFFFFF;        /* Pure white for cards/sections */
-  --black: #1A1A1A;        /* Deep black for text */
-  --charcoal: #2C2C2C;     /* Softer black for secondary text */
-  --gold: #C9A961;         /* Muted, sophisticated gold */
-  --beige: #E8E5E0;        /* Light beige for borders/separators */
-  --taupe: #D4C5B0;        /* Warm taupe for accents */
-  
-  /* Legacy variables for backward compatibility - will be phased out */
-  --black-dark: #1A1A1A;
-  --black-light: #FFFFFF;
-  --black-lighter: #F5F3F0;
-  --grey: #E8E5E0;
-  --off-white: #2C2C2C;
-  --ladies-pink: #d63384;
-  --ladies-purple: #6f42c1;
-  
-  /* Elegant typography */
-  --font-heading: 'Playfair Display', 'Cormorant Garamond', serif;
-  --font-body: 'Inter', 'Work Sans', sans-serif;
-  --font-accent: 'Cormorant', serif;
+@layer utilities {
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-lift {
+    box-shadow: var(--shadow-lift);
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-body);
-  background-color: var(--cream);
-  color: var(--charcoal);
-  line-height: 1.8;
-  overflow-x: hidden;
-  font-weight: 300;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  color: var(--black);
-}
-
-/* Main headings (h1) - elegant, solid black */
-h1 {
-  color: var(--black);
-  font-weight: 300;
-  letter-spacing: 2px;
-}
-
-/* Secondary headings - charcoal */
-h2, h3, h4, h5, h6 {
-  color: var(--charcoal);
-  font-weight: 400;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-button {
-  font-family: var(--font-body);
-  cursor: pointer;
-  border: none;
-  outline: none;
-}
-
-/* Global select/dropdown styling */
 select {
   background: var(--white) !important;
   color: var(--charcoal) !important;
   border: 1px solid var(--beige) !important;
+  border-radius: 0.75rem !important;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -88,56 +147,16 @@ select {
   padding-right: 2.5rem !important;
 }
 
-select:focus {
-  outline: none;
-  border-color: var(--charcoal) !important;
-  background-color: var(--white) !important;
-}
-
-select option {
-  background: var(--white) !important;
-  color: var(--charcoal) !important;
-  padding: 0.5rem;
-}
-
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: var(--cream);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--taupe);
-  border-radius: 5px;
+  background: #d0c8bc;
+  border-radius: 999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: var(--charcoal);
 }
-
-/* Mobile optimizations */
-@media (max-width: 480px) {
-  html {
-    font-size: 14px;
-  }
-
-  body {
-    font-size: 0.95rem;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.6rem;
-  }
-
-  h3 {
-    font-size: 1.3rem;
-  }
-}
-

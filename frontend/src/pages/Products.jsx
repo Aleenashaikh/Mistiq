@@ -1,85 +1,139 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 import axios from '../config/axios';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-import PriceDisplay from '../components/PriceDisplay';
+import ProductCard from '../components/ProductCard';
 import SEO from '../components/SEO';
-import { SITE_URL, getProductPath } from '../lib/site';
+import { SITE_URL } from '../lib/site';
+import { cn } from '@/lib/utils';
 import './Products.css';
 
-// Category definitions matching ProductCategories
-const categories = {
-  'best-seller': { products: ['morgan', 'inferno', 'eloria'] },
-  'bold-intense': { products: ['morgan', 'inferno'] },
-  'fresh-modern': { products: ['oro blue', 'eloria', 'morgan'] },
-  'floral-romantic': { products: ['eloria', 'La Fleure'] }
+const CATEGORY_DEFS = {
+  'best-seller': {
+    label: 'Bestsellers',
+    products: ['morgan', 'inferno', 'eloria'],
+  },
+  'bold-intense': {
+    label: 'Bold & Intense',
+    products: ['morgan', 'inferno'],
+  },
+  'fresh-modern': {
+    label: 'Fresh & Modern',
+    products: ['oro blue', 'eloria', 'morgan'],
+  },
+  'floral-romantic': {
+    label: 'Floral & Romantic',
+    products: ['eloria', 'La Fleure'],
+  },
 };
 
+const GENDER_OPTIONS = [
+  { value: 'All', label: 'All' },
+  { value: 'Male', label: 'For Him' },
+  { value: 'Female', label: 'For Her' },
+];
+
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Newest' },
+  { value: 'price-asc', label: 'Price ↑' },
+  { value: 'price-desc', label: 'Price ↓' },
+  { value: 'name', label: 'A–Z' },
+];
+
+const getPrice = (p) =>
+  p.discountedPrice && p.discountedPrice > 0
+    ? p.discountedPrice
+    : p.actualPrice || p.price || 0;
+
 const Products = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState('newest');
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const { addToCart } = useCart();
   const { showToast } = useToast();
 
-  const [filters, setFilters] = useState({
-    gender: searchParams.get('gender') || 'All',
-    category: searchParams.get('category') || 'All',
-  });
+  const gender = searchParams.get('gender') || 'All';
+  const category = searchParams.get('category') || 'All';
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('/api/products');
         setProducts(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
+      } finally {
         setLoading(false);
       }
     };
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    // Update filters from URL params
-    const genderParam = searchParams.get('gender');
-    const categoryParam = searchParams.get('category');
-    setFilters({
-      gender: genderParam || 'All',
-      category: categoryParam || 'All',
-    });
-  }, [searchParams]);
+  const updateParam = (key, value) => {
+    const next = new URLSearchParams(searchParams);
+    if (!value || value === 'All') next.delete(key);
+    else next.set(key, value);
+    setSearchParams(next, { replace: true });
+  };
 
-  useEffect(() => {
-    let filtered = products;
-    
-    if (filters.gender !== 'All') {
-      filtered = filtered.filter(p => p.gender === filters.gender);
+  const clearFilters = () => {
+    setSearchParams({}, { replace: true });
+    setSearch('');
+    setSort('newest');
+  };
+
+  const filteredProducts = useMemo(() => {
+    let list = [...products];
+
+    if (gender !== 'All') {
+      list = list.filter((p) => p.gender === gender);
     }
 
-    if (filters.category !== 'All' && categories[filters.category]) {
-      const categoryProducts = categories[filters.category].products;
-      filtered = filtered.filter(p => 
-        categoryProducts.some(name => 
-          p.name.toLowerCase().trim() === name.toLowerCase().trim()
+    if (category !== 'All' && CATEGORY_DEFS[category]) {
+      const names = CATEGORY_DEFS[category].products;
+      list = list.filter((p) =>
+        names.some(
+          (name) => p.name.toLowerCase().trim() === name.toLowerCase().trim()
         )
       );
     }
 
-    setFilteredProducts(filtered);
-    
-    // Scroll to top when filter changes
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [filters, products, categories]);
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.name?.toLowerCase().includes(q) ||
+          p.impressionOf?.toLowerCase().includes(q) ||
+          p.gender?.toLowerCase().includes(q)
+      );
+    }
 
-  const categoryParam = searchParams.get('category') || '';
-  const activeCategory = Object.keys(categories).find(k => k === categoryParam);
-  const categoryLabel = activeCategory
-    ? activeCategory.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
-    : '';
+    switch (sort) {
+      case 'price-asc':
+        list.sort((a, b) => getPrice(a) - getPrice(b));
+        break;
+      case 'price-desc':
+        list.sort((a, b) => getPrice(b) - getPrice(a));
+        break;
+      case 'name':
+        list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        break;
+      default:
+        list.sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
+    }
+
+    return list;
+  }, [products, gender, category, search, sort]);
+
+  const categoryParam = category !== 'All' ? category : '';
+  const categoryLabel = CATEGORY_DEFS[category]?.label || '';
   const productsUrl = categoryParam
     ? `/products?category=${categoryParam}`
     : '/products';
@@ -89,137 +143,187 @@ const Products = () => {
     { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products` },
   ];
   if (categoryLabel) {
-    breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: categoryLabel, item: `${SITE_URL}${productsUrl}` });
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: categoryLabel,
+      item: `${SITE_URL}${productsUrl}`,
+    });
   }
 
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: breadcrumbItems,
+  const handleQuickAdd = (product) => {
+    if (product.stock === 0) {
+      showToast('This product is sold out!', 'error');
+      return;
+    }
+    const priceToUse = getPrice(product);
+    addToCart({ ...product, price: priceToUse }, 1);
+    showToast('Added to cart!', 'success');
   };
+
+  const hasActiveFilters =
+    gender !== 'All' || category !== 'All' || search.trim() || sort !== 'newest';
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Our Collection - Mistiq Perfumeries | Perfume Dupes & Designer Impressions"
-        description="Explore our complete collection of luxury fragrances and designer perfume dupes. Find impressions of Gucci Flora, Miss Dior, Azzaro Wanted, Sauvage Dior, Tuscan Leather and more. Affordable designer alternatives."
+        description="Explore our complete collection of luxury fragrances and designer perfume dupes. Find impressions of Gucci Flora, Miss Dior, Azzaro Wanted, Sauvage Dior, Tuscan Leather and more."
         url={productsUrl}
-        jsonLd={[breadcrumbJsonLd]}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: breadcrumbItems,
+          },
+        ]}
       />
       <div className="products-page">
         <div className="products-hero">
-        <h1>Explore Our Collection</h1>
-        <p>
-          Each bottle is a masterpiece—carefully blended to complement your mood, personality, and style. 
-          Whether you prefer warm, floral, citrusy, or musky notes, Mistiq Perfumeries helps you unveil your essence.
-        </p>
-      </div>
+          <h1>Explore Our Collection</h1>
+          <p>
+            Each bottle is a masterpiece—carefully blended to complement your
+            mood, personality, and style.
+          </p>
+        </div>
 
-      <div className="products-container">
-        <div className="filters-sidebar">
-          <h3>Filters</h3>
-          <div className="filter-group">
-            <label>Gender</label>
-            <select 
-              value={filters.gender}
-              onChange={(e) => setFilters({...filters, gender: e.target.value})}
+        <div className="products-toolbar">
+          <div className="products-search">
+            <Search className="products-search-icon" aria-hidden />
+            <input
+              type="search"
+              placeholder="Search by name or inspiration…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search products"
+            />
+            {search && (
+              <button
+                type="button"
+                className="products-search-clear"
+                onClick={() => setSearch('')}
+                aria-label="Clear search"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          <div className="products-toolbar-right">
+            <button
+              type="button"
+              className="products-filter-toggle"
+              onClick={() => setFiltersOpen((o) => !o)}
+              aria-expanded={filtersOpen}
             >
-              <option value="All">All</option>
-              <option value="Male">For Him</option>
-              <option value="Female">For Her</option>
+              <SlidersHorizontal className="h-4 w-4" />
+              Filters
+            </button>
+            <select
+              className="products-sort"
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              aria-label="Sort products"
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
-        <div className="products-grid">
-          {loading ? (
-            <div className="loading">Loading...</div>
-          ) : filteredProducts.length === 0 ? (
-            <div className="no-products">No products found</div>
-          ) : (
-            filteredProducts.map(product => (
-              <div key={product._id} className="product-card-wrapper">
-                <Link to={getProductPath(product)} className="product-card-link">
-                  <div className="product-card" style={{ '--accent-color': product.themeColor }}>
-                    <div className="product-image-wrapper">
-                      {product.discountedPrice && product.discountedPrice > 0 && (product.actualPrice || product.price) && (
-                        <div className="discount-badge-card">
-                          {Math.round(((product.actualPrice || product.price) - product.discountedPrice) / (product.actualPrice || product.price) * 100)}% OFF
-                        </div>
-                      )}
-                      <img 
-                        src={product.bottleImage || '/images/perfumes/placeholder.jpg'} 
-                        alt={`${product.name} - ${product.impressionOf} inspired perfume`}
-                        className="main-image"
-                        loading="lazy"
-                        onError={(e) => {
-                          if (!e.target.dataset.errorHandled) {
-                            e.target.src = '/images/perfumes/placeholder.jpg';
-                            e.target.dataset.errorHandled = 'true';
-                          }
-                        }}
-                      />
-                      {product.hoverImage && (
-                        <img 
-                          src={product.hoverImage} 
-                          alt={`${product.name} alternate view`}
-                          className="hover-image"
-                          loading="lazy"
-                          onError={(e) => {
-                            if (!e.target.dataset.errorHandled) {
-                              e.target.style.display = 'none';
-                              e.target.dataset.errorHandled = 'true';
-                            }
-                          }}
-                        />
-                      )}
-                      {product.stock === 0 && (
-                        <div className="sold-out-badge">Sold Out</div>
-                      )}
-                    </div>
-                    <div className="product-info">
-                      <h3>{product.name}</h3>
-                      <p className="product-impression">Inspired by {product.impressionOf}</p>
-                      <div className="gender-size-container">
-                        <span className="product-gender">{product.gender}</span>
-                        <span className="product-size">50 mL</span>
-                      </div>
-                      <div className="product-stock-small">
-                        {product.stock > 0 ? `` : 'Sold Out'}
-                      </div>
-                      <PriceDisplay product={product} />
-                    </div>
-                  </div>
-                </Link>
+        <div className={cn('products-filters', filtersOpen && 'is-open')}>
+          <div className="filter-chip-group">
+            <span className="filter-chip-label">Gender</span>
+            <div className="filter-chips">
+              {GENDER_OPTIONS.map((opt) => (
                 <button
-                  className="quick-add-btn"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (product.stock === 0) {
-                      showToast('This product is sold out!', 'error');
-                      return;
-                    }
-                    // Use discounted price if available, otherwise actual price
-                    const priceToUse = product.discountedPrice && product.discountedPrice > 0 
-                      ? product.discountedPrice 
-                      : (product.actualPrice || product.price);
-                    const productWithPrice = { ...product, price: priceToUse };
-                    addToCart(productWithPrice, 1);
-                    showToast('Added to cart!', 'success');
-                  }}
-                  disabled={product.stock === 0}
+                  key={opt.value}
+                  type="button"
+                  className={cn(
+                    'filter-chip',
+                    gender === opt.value && 'filter-chip--active'
+                  )}
+                  onClick={() => updateParam('gender', opt.value)}
                 >
-                  {product.stock === 0 ? 'Sold Out' : 'Quick Add'}
+                  {opt.label}
                 </button>
-              </div>
-            ))
+              ))}
+            </div>
+          </div>
+
+          <div className="filter-chip-group">
+            <span className="filter-chip-label">Collection</span>
+            <div className="filter-chips">
+              <button
+                type="button"
+                className={cn(
+                  'filter-chip',
+                  category === 'All' && 'filter-chip--active'
+                )}
+                onClick={() => updateParam('category', 'All')}
+              >
+                All
+              </button>
+              {Object.entries(CATEGORY_DEFS).map(([key, def]) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={cn(
+                    'filter-chip',
+                    category === key && 'filter-chip--active'
+                  )}
+                  onClick={() => updateParam('category', key)}
+                >
+                  {def.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {hasActiveFilters && (
+            <button type="button" className="filter-clear" onClick={clearFilters}>
+              Clear all
+            </button>
           )}
         </div>
+
+        <div className="products-meta">
+          <span>
+            {loading
+              ? 'Loading…'
+              : `${filteredProducts.length} fragrance${filteredProducts.length === 1 ? '' : 's'}`}
+          </span>
+        </div>
+
+        <div className="products-grid-wrap">
+          <div className="products-grid">
+            {loading ? (
+              <div className="loading">Loading...</div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="no-products">
+                <p>No products found</p>
+                <button type="button" className="filter-clear" onClick={clearFilters}>
+                  Reset filters
+                </button>
+              </div>
+            ) : (
+              filteredProducts.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  showQuickAdd
+                  onQuickAdd={handleQuickAdd}
+                />
+              ))
+            )}
+          </div>
+        </div>
       </div>
-    </div>
     </>
   );
 };
 
 export default Products;
-

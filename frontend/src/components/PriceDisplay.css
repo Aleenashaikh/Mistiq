@@ -3,88 +3,59 @@
 }
 
 .discount-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #dc3545;
+  display: inline-flex;
+  align-items: center;
+  background: #1f1f1f;
   color: var(--white);
-  padding: 0.4rem 0.8rem;
-  border-radius: 0;
-  font-size: 0.75rem;
-  font-weight: 400;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  .discount-badge {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.6rem;
-    top: 8px;
-    right: 8px;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
 }
 
 .price-container {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: 0.5rem;
+  margin-top: 0.15rem;
 }
 
 .actual-price {
   text-decoration: line-through;
   color: var(--charcoal);
-  opacity: 0.5;
-  font-size: 0.9em;
-  font-weight: 300;
+  opacity: 0.45;
+  font-size: 0.85em;
+  font-weight: 400;
 }
 
-.discounted-price {
-  color: var(--charcoal);
-  font-weight: 300;
-  font-size: 1.2em;
-}
-
+.discounted-price,
 .regular-price {
-  color: var(--charcoal);
-  font-weight: 300;
-  font-size: 1.2em;
+  color: var(--black);
+  font-weight: 600;
+  font-size: 1.05em;
+  letter-spacing: -0.01em;
 }
 
-/* For product cards */
-.product-card .price-display {
-  margin-top: 1rem;
+.product-card-price .price-container {
+  margin-top: 0;
 }
 
-.product-card .discount-badge {
-  top: 10px;
-  right: 10px;
-  font-size: 0.7rem;
-  padding: 0.25rem 0.5rem;
+.product-card-price .discount-badge {
+  display: none;
 }
 
-/* For product detail page */
 .product-detail-page .price-display {
-  margin: 1rem 0;
+  margin: 0.75rem 0;
 }
 
-.product-detail-page .discounted-price {
-  font-size: 2rem;
+.product-detail-page .discounted-price,
+.product-detail-page .regular-price {
+  font-size: 1.75rem;
 }
 
 .product-detail-page .actual-price {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
-
