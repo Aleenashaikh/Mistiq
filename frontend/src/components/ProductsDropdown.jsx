@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../config/axios';
+import { getProductPath } from '../lib/site';
 import './ProductsDropdown.css';
 
 const ProductsDropdown = ({ isOpen, onClose }) => {
@@ -91,7 +92,7 @@ const ProductsDropdown = ({ isOpen, onClose }) => {
                 {products.map((product) => (
                   <Link
                     key={product._id}
-                    to={`/products/${product._id}`}
+                    to={getProductPath(product)}
                     className="product-card"
                     onClick={onClose}
                   >
@@ -99,6 +100,7 @@ const ProductsDropdown = ({ isOpen, onClose }) => {
                       src={product.bottleImage || '/images/perfumes/placeholder.jpg'}
                       alt={product.name}
                       className="product-card-image"
+                      loading="lazy"
                       onError={(e) => {
                         e.target.src = '/images/perfumes/placeholder.jpg';
                       }}
@@ -133,7 +135,7 @@ const ProductsDropdown = ({ isOpen, onClose }) => {
                       {categoryProducts.map((product) => (
                         <Link
                           key={product._id}
-                          to={`/products/${product._id}`}
+                          to={getProductPath(product)}
                           className="category-product-card"
                           onClick={onClose}
                         >
@@ -141,6 +143,7 @@ const ProductsDropdown = ({ isOpen, onClose }) => {
                             src={product.bottleImage || '/images/perfumes/placeholder.jpg'}
                             alt={product.name}
                             className="category-product-image"
+                            loading="lazy"
                             onError={(e) => {
                               e.target.src = '/images/perfumes/placeholder.jpg';
                             }}

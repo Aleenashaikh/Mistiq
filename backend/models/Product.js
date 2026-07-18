@@ -1,10 +1,20 @@
 import mongoose from 'mongoose';
+import { ensureUniqueProductSlug, slugify } from '../utils/slugify.js';
 
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     trim: true,
+  },
+  /** Human-readable URL slug, e.g. "morgan" → /products/morgan */
+  slug: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    unique: true,
+    sparse: true,
+    index: true,
   },
   gender: {
     type: String,
@@ -82,6 +92,27 @@ const productSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
+});
+
+// Auto-generate a unique slug from the product name when missing or name changed
+productSchema.pre('validate', async function (next) {
+  try {
+    if (!this.name) return next();
+
+    if (this.isModified('slug') && this.slug) {
+      const base = slugify(this.slug) || slugify(this.name);
+      this.slug = await ensureUniqueProductSlug(this.constructor, base, this._id || null);
+    } else if (!this.slug || this.isModified('name')) {
+      this.slug = await ensureUniqueProductSlug(
+        this.constructor,
+        this.name,
+        this._id || null
+      );
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 export default mongoose.model('Product', productSchema);

@@ -16,7 +16,7 @@ const SplitSection = () => {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="split-image"
         >
-          <img src="/images/split-section.png" alt="Luxury Perfume" />
+          <img src="/images/split-section.png" alt="Luxury Perfume" loading="lazy" />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, x: 50 }}

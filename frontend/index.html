@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/images/logo.png" />
     <link rel="apple-touch-icon" href="/images/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#d4af37" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +16,7 @@
     <meta name="title" content="Mistiq Perfumeries - Luxury Fragrances" />
     <meta name="description" content="Discover handcrafted luxury fragrances designed to match every personality. Shop premium perfumes with unique scents that tell your story." />
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook (defaults; react-helmet-async sets per-route URLs) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.mistiq-perfumeries.com/" />
     <meta property="og:title" content="Mistiq Perfumeries - Luxury Fragrances" />
@@ -32,7 +34,7 @@
     <meta name="twitter:description" content="Discover handcrafted luxury fragrances designed to match every personality. Shop premium perfumes with unique scents that tell your story." />
     <meta name="twitter:image" content="https://www.mistiq-perfumeries.com/images/logo.png" />
 
-    <!-- Fallback canonical (react-helmet-async overrides per-page) -->
+    <!-- Fallback canonical (react-helmet-async overrides with current path) -->
     <link rel="canonical" href="https://www.mistiq-perfumeries.com/" />
   </head>
   <body>

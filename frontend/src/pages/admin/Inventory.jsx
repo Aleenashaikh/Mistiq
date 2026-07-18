@@ -10,6 +10,7 @@ const Inventory = () => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
+    slug: '',
     gender: 'Male',
     impressionOf: '',
     topNotes: [],
@@ -69,6 +70,10 @@ const Inventory = () => {
           ? formData.discountedPrice 
           : null,
       };
+      // Empty slug → let backend auto-generate from name
+      if (!submitData.slug || !String(submitData.slug).trim()) {
+        delete submitData.slug;
+      }
       
       if (editingProduct) {
         await axios.put(`/api/admin/products/${editingProduct._id}`, submitData);
@@ -89,6 +94,7 @@ const Inventory = () => {
     setEditingProduct(product);
     setFormData({
       name: product.name,
+      slug: product.slug || '',
       gender: product.gender,
       impressionOf: product.impressionOf,
       topNotes: product.topNotes || [],
@@ -196,6 +202,7 @@ const Inventory = () => {
   const resetForm = () => {
     setFormData({
       name: '',
+      slug: '',
       gender: 'Male',
       impressionOf: '',
       topNotes: [],
@@ -243,6 +250,19 @@ const Inventory = () => {
                   onChange={handleChange}
                   required
                 />
+              </div>
+              <div className="form-group">
+                <label>URL Slug (optional)</label>
+                <input
+                  type="text"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={handleChange}
+                  placeholder="auto from name, e.g. morgan"
+                />
+                <small style={{ color: '#888' }}>
+                  Public URL: /products/{formData.slug || 'product-name'}
+                </small>
               </div>
               <div className="form-group">
                 <label>Gender</label>
@@ -304,6 +324,7 @@ const Inventory = () => {
                       key={`preview-${formData.bottleImage}`}
                       src={formData.bottleImage} 
                       alt="Preview" 
+                      loading="lazy"
                       style={{ 
                         width: '150px', 
                         height: '150px', 
@@ -510,6 +531,7 @@ const Inventory = () => {
             <tr>
               <th>Image</th>
               <th>Name</th>
+              <th>Slug</th>
               <th>Gender</th>
               <th>Price</th>
               <th>Stock</th>
@@ -538,6 +560,11 @@ const Inventory = () => {
                   />
                 </td>
                 <td>{product.name}</td>
+                <td>
+                  <code style={{ fontSize: '0.8rem' }}>
+                    {product.slug || '—'}
+                  </code>
+                </td>
                 <td>{product.gender}</td>
                 <td>
                   {product.discountedPrice ? (

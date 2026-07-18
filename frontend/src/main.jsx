@@ -7,8 +7,11 @@ import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import { DiscountProvider } from './context/DiscountContext';
 import './config/axios'; // Initialize axios with baseURL
+import { initGA } from './lib/analytics';
 import App from './App';
 import './index.css';
+
+initGA();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

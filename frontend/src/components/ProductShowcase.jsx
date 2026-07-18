@@ -8,6 +8,7 @@ import axios from '../config/axios';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import PriceDisplay from './PriceDisplay';
+import { getProductPath } from '../lib/site';
 import './ProductShowcase.css';
 
 const ProductShowcase = () => {
@@ -144,6 +145,7 @@ const ProductShowcase = () => {
                   src={product.hoverImage} 
                   alt={`${product.name} hover`}
                   className="product-image hover-image"
+                  loading="lazy"
                   onError={(e) => {
                     if (!e.target.dataset.errorHandled) {
                       e.target.style.display = 'none';
@@ -153,7 +155,7 @@ const ProductShowcase = () => {
                 />
               )}
               <div className="product-overlay">
-                <Link to={`/products/${product._id}`} className="view-details-btn">
+                <Link to={getProductPath(product)} className="view-details-btn">
                   View Details
                 </Link>
               </div>

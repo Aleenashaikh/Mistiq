@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from '../config/axios';
 import { Link } from 'react-router-dom';
+import { getProductPath } from '../lib/site';
 import './CircularSlider.css';
 
 // Helper function to get first sentence from description
@@ -41,7 +42,7 @@ const CircularSlider = () => {
           src: product.bottleImage || '/images/perfumes/placeholder.jpg',
           title: product.name,
           description: getFirstSentence(product.description || `Experience ${product.name}, a captivating fragrance that embodies luxury and elegance.`),
-          productId: product._id,
+          productPath: getProductPath(product),
         }));
         
         setProducts(slidesData);
@@ -133,7 +134,7 @@ const CircularSlider = () => {
               <h2 className="section-title">Discover Our Signature Fragrances</h2>
               <div className="slide-text-content">
                 <h3 className="slide-title">
-                  <Link to={`/products/${products[currentIndex]?.productId}`} className="slide-title-link">
+                  <Link to={products[currentIndex]?.productPath || '/products'} className="slide-title-link">
                     {products[currentIndex]?.title}
                   </Link>
                 </h3>
@@ -164,13 +165,14 @@ const CircularSlider = () => {
                 {products.map((product, index) => (
                   <Link 
                     key={product.id} 
-                    to={`/products/${product.productId}`}
+                    to={product.productPath || '/products'}
                     className={`slider-image-link ${getImageClass(index)}`}
                   >
                     <img
                       className="slider-image"
                       src={product.src}
                       alt={product.title}
+                      loading="lazy"
                       onError={(e) => {
                         if (!e.target.dataset.errorHandled) {
                           e.target.src = '/images/perfumes/placeholder.jpg';

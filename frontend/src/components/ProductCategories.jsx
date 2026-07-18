@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../config/axios';
 import PriceDisplay from './PriceDisplay';
+import { getProductPath } from '../lib/site';
 import './ProductCategories.css';
 
 // Helper function to get image path from product name
@@ -32,7 +33,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="category-product-card">
       <Link
-        to={`/products/${product._id}`}
+        to={getProductPath(product)}
         className="category-product-link"
       >
         <div className="category-product-image-wrapper">
@@ -45,6 +46,7 @@ const ProductCard = ({ product }) => {
             src={imagePath}
             alt={product.name}
             className="category-product-image"
+            loading="lazy"
             onError={(e) => {
               e.target.src = '/images/perfumes/placeholder.jpg';
             }}
@@ -74,7 +76,7 @@ const ProductCard = ({ product }) => {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                navigate(`/products/${product._id}`);
+                navigate(getProductPath(product));
               }}
             >
               Buy Now

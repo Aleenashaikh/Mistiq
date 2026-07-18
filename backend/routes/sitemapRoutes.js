@@ -14,6 +14,7 @@ const SITE_URL = 'https://www.mistiq-perfumeries.com';
 const staticRoutes = [
   { loc: '/', priority: '1.0', changefreq: 'daily' },
   { loc: '/products', priority: '0.9', changefreq: 'daily' },
+  { loc: '/blog', priority: '0.7', changefreq: 'weekly' },
   { loc: '/about', priority: '0.6', changefreq: 'monthly' },
   { loc: '/contact', priority: '0.6', changefreq: 'monthly' },
   { loc: '/feedback', priority: '0.5', changefreq: 'monthly' },
@@ -26,7 +27,7 @@ router.get('/', async (req, res) => {
     // Fetch visible products to build dynamic URLs
     let products = [];
     try {
-      products = await Product.find({ isVisible: true }, '_id updatedAt').lean();
+      products = await Product.find({ isVisible: true }, '_id slug name updatedAt').lean();
     } catch (_) {
       // DB failure? serve static-only sitemap gracefully
     }
@@ -42,14 +43,23 @@ router.get('/', async (req, res) => {
     <priority>${priority}</priority>
   </url>`
       ),
-      // Dynamic product pages
+      // Dynamic product pages (prefer human-readable slug)
       ...products.map((p) => {
         const lastmod = p.updatedAt
           ? new Date(p.updatedAt).toISOString().split('T')[0]
           : now;
+        const slug =
+          p.slug ||
+          String(p.name || '')
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-') ||
+          p._id;
         return `
   <url>
-    <loc>${SITE_URL}/products/${p._id}</loc>
+    <loc>${SITE_URL}/products/${slug}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

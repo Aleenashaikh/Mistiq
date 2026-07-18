@@ -1,12 +1,14 @@
 import { Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { trackPageView } from './lib/metaPixel';
+import { trackGAPageView } from './lib/analytics';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Feedback from './pages/Feedback';
+import Blog from './pages/Blog';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
@@ -31,10 +33,11 @@ function App() {
   const { activateQrDiscount, qrDiscount } = useDiscount();
   const { showToast } = useToast();
 
-  // Fire Meta Pixel pageView on every route change
+  // Fire Meta Pixel + GA4 page views on every route change
   useEffect(() => {
     trackPageView();
-  }, [location.pathname]);
+    trackGAPageView(`${location.pathname}${location.search}`);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     if (searchParams.get('ref') === 'qr' && !qrDiscount) {
@@ -96,10 +99,11 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/products/:slug" element={<ProductDetail />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/feedback" element={<Feedback />} />
+                <Route path="/blog" element={<Blog />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
               </Routes>
@@ -112,4 +116,3 @@ function App() {
 }
 
 export default App;
-

@@ -70,6 +70,7 @@ const Footer = () => {
               <ul className={`footer-links ${expandedSection === 'company' ? 'expanded' : ''}`}>
                 <li><Link to="/about">About</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
+                <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/feedback">Feedback</Link></li>
               </ul>
             </div>
@@ -81,6 +82,7 @@ const Footer = () => {
                 src="/images/logo.png" 
                 alt="Mistiq Perfumeries Logo" 
                 className="footer-logo"
+                loading="lazy"
                 onError={(e) => {
                   e.target.style.display = 'none';
                 }}
