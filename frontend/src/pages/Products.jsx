@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import PriceDisplay from '../components/PriceDisplay';
 import SEO from '../components/SEO';
+import { SITE_URL, getProductPath } from '../lib/site';
 import './Products.css';
 
 // Category definitions matching ProductCategories
@@ -74,19 +75,21 @@ const Products = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [filters, products, categories]);
 
-  const siteUrl = 'https://www.mistiq-perfumeries.com';
   const categoryParam = searchParams.get('category') || '';
   const activeCategory = Object.keys(categories).find(k => k === categoryParam);
   const categoryLabel = activeCategory
     ? activeCategory.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
     : '';
+  const productsUrl = categoryParam
+    ? `/products?category=${categoryParam}`
+    : '/products';
 
   const breadcrumbItems = [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-    { '@type': 'ListItem', position: 2, name: 'Products', item: `${siteUrl}/products` },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Products', item: `${SITE_URL}/products` },
   ];
   if (categoryLabel) {
-    breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: categoryLabel, item: `${siteUrl}/products?category=${categoryParam}` });
+    breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: categoryLabel, item: `${SITE_URL}${productsUrl}` });
   }
 
   const breadcrumbJsonLd = {
@@ -100,7 +103,7 @@ const Products = () => {
       <SEO 
         title="Our Collection - Mistiq Perfumeries | Perfume Dupes & Designer Impressions"
         description="Explore our complete collection of luxury fragrances and designer perfume dupes. Find impressions of Gucci Flora, Miss Dior, Azzaro Wanted, Sauvage Dior, Tuscan Leather and more. Affordable designer alternatives."
-        url="/products"
+        url={productsUrl}
         jsonLd={[breadcrumbJsonLd]}
       />
       <div className="products-page">
@@ -136,7 +139,7 @@ const Products = () => {
           ) : (
             filteredProducts.map(product => (
               <div key={product._id} className="product-card-wrapper">
-                <Link to={`/products/${product._id}`} className="product-card-link">
+                <Link to={getProductPath(product)} className="product-card-link">
                   <div className="product-card" style={{ '--accent-color': product.themeColor }}>
                     <div className="product-image-wrapper">
                       {product.discountedPrice && product.discountedPrice > 0 && (product.actualPrice || product.price) && (
@@ -148,6 +151,7 @@ const Products = () => {
                         src={product.bottleImage || '/images/perfumes/placeholder.jpg'} 
                         alt={`${product.name} - ${product.impressionOf} inspired perfume`}
                         className="main-image"
+                        loading="lazy"
                         onError={(e) => {
                           if (!e.target.dataset.errorHandled) {
                             e.target.src = '/images/perfumes/placeholder.jpg';
@@ -160,6 +164,7 @@ const Products = () => {
                           src={product.hoverImage} 
                           alt={`${product.name} alternate view`}
                           className="hover-image"
+                          loading="lazy"
                           onError={(e) => {
                             if (!e.target.dataset.errorHandled) {
                               e.target.style.display = 'none';

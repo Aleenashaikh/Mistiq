@@ -53,6 +53,7 @@ const SocialMediaLinks = ({ showQR = true, compact = false }) => {
               src="/images/whatsapp-qr.jpg" 
               alt="WhatsApp QR Code - Scan to start a chat with Mistiq Perfumeries"
               className="whatsapp-qr-image"
+              loading="lazy"
               onError={(e) => {
                 // Fallback if QR code image doesn't exist
                 e.target.style.display = 'none';

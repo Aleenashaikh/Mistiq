@@ -1,0 +1,73 @@
+.blog-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.blog-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.blog-hero h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin-bottom: 0.75rem;
+  color: var(--black, #1a1a1a);
+}
+
+.blog-hero p {
+  color: var(--text-muted, #555);
+  line-height: 1.6;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.blog-card {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1.25rem 0;
+}
+
+.blog-card h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+.blog-card p {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted, #555);
+  line-height: 1.55;
+}
+
+.blog-card-status {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold, #d4af37);
+}
+
+.blog-cta {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+
+.blog-shop-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--black, #1a1a1a);
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  font-size: 0.9rem;
+}
+
+.blog-shop-link:hover {
+  opacity: 0.9;
+}

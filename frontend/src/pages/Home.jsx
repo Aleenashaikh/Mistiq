@@ -5,16 +5,15 @@ import ProductCategories from '../components/ProductCategories';
 import CircularSlider from '../components/CircularSlider';
 import Feedbacks from '../components/Feedbacks';
 import SEO from '../components/SEO';
+import { SITE_URL } from '../lib/site';
 import './Home.css';
-
-const siteUrl = 'https://www.mistiq-perfumeries.com';
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Mistiq Perfumeries',
-  url: siteUrl,
-  logo: `${siteUrl}/images/logo.png`,
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo.png`,
   description: 'Luxury fragrance house offering premium perfume impressions of designer scents.',
   sameAs: [
     'https://www.instagram.com/mistiqperfumeries',

@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 import HeroSection from '../models/HeroSection.js';
 import AnnouncementBanner from '../models/AnnouncementBanner.js';
+import { slugify } from '../utils/slugify.js';
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get('/', async (req, res) => {
     
     const products = await Product.find({ isVisible: true })
       .sort({ createdAt: -1 })
-      .select('name bottleImage hoverImage price actualPrice discountedPrice stock rating gender impressionOf themeColor isVisible') // Only select needed fields
+      .select('name slug bottleImage hoverImage price actualPrice discountedPrice stock rating gender impressionOf themeColor isVisible description') // Only select needed fields
       .lean() // Use lean() for faster queries
       .maxTimeMS(20000); // Add query timeout (20 seconds)
     
@@ -95,10 +96,31 @@ router.get('/gender/:gender', async (req, res) => {
   }
 });
 
-// Get product by ID (only if visible) - MUST come last
-router.get('/:id', async (req, res) => {
+// Get product by slug or ID (only if visible) - MUST come last
+router.get('/:idOrSlug', async (req, res) => {
   try {
-    const product = await Product.findOne({ _id: req.params.id, isVisible: true });
+    const { idOrSlug } = req.params;
+    const key = String(idOrSlug || '').toLowerCase();
+    let product = null;
+
+    const looksLikeObjectId =
+      mongoose.Types.ObjectId.isValid(idOrSlug) &&
+      String(new mongoose.Types.ObjectId(idOrSlug)) === idOrSlug;
+
+    if (looksLikeObjectId) {
+      product = await Product.findOne({ _id: idOrSlug, isVisible: true });
+    }
+    if (!product) {
+      product = await Product.findOne({ slug: key, isVisible: true });
+    }
+    // Fallback for products not yet backfilled with slug: match slugified name
+    if (!product) {
+      const candidates = await Product.find({ isVisible: true });
+      product =
+        candidates.find(
+          (p) => slugify(p.name) === key || (p.slug && p.slug === key)
+        ) || null;
+    }
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }

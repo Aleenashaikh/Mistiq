@@ -45,6 +45,7 @@ const Cart = () => {
                     src={item.product.bottleImage || '/images/perfumes/placeholder.jpg'}
                     alt={item.product.name}
                     className="cart-item-image"
+                    loading="lazy"
                   />
                   <div className="cart-item-info">
                     <h3>{item.product.name}</h3>

@@ -293,7 +293,7 @@ router.get('/products', async (req, res) => {
 router.post('/products', async (req, res) => {
   try {
     const product = new Product(req.body);
-    await product.save();
+    await product.save(); // pre-validate generates unique slug
     res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -303,14 +303,12 @@ router.post('/products', async (req, res) => {
 // Update product
 router.put('/products/:id', async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
+    Object.assign(product, req.body);
+    await product.save(); // runs slug pre-validate hook
     res.json(product);
   } catch (error) {
     res.status(400).json({ message: error.message });

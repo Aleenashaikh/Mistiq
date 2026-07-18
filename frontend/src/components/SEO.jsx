@@ -1,4 +1,6 @@
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
+import { SITE_URL } from '../lib/site';
 
 // Comprehensive base keywords
 const getBaseKeywords = (impressionOf = '', productName = '', gender = '') => {
@@ -125,10 +127,18 @@ const SEO = ({
   jsonLd = [],         // Array of JSON-LD objects to inject
   canonical = '',      // Override canonical if needed
 }) => {
-  const siteUrl = 'https://www.mistiq-perfumeries.com';
-  const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
+  const location = useLocation();
+  const gscVerification = import.meta.env.VITE_GSC_VERIFICATION || '';
+
+  // Prefer explicit path; otherwise use current route (pathname + search)
+  const path =
+    url ||
+    `${location.pathname}${location.search || ''}` ||
+    '/';
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const fullUrl = `${SITE_URL}${normalizedPath === '/' ? '/' : normalizedPath}`;
   const canonicalUrl = canonical || fullUrl;
-  const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+  const fullImageUrl = image.startsWith('http') ? image : `${SITE_URL}${image.startsWith('/') ? image : `/${image}`}`;
 
   // Use provided keywords or generate comprehensive keywords
   const finalKeywords = keywords || getBaseKeywords(impressionOf, productName, gender);
@@ -144,6 +154,11 @@ const SEO = ({
       <meta name="robots" content="index, follow" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
+
+      {/* Google Search Console verification (set VITE_GSC_VERIFICATION) */}
+      {gscVerification ? (
+        <meta name="google-site-verification" content={gscVerification} />
+      ) : null}
 
       {/* Additional SEO Meta Tags */}
       <meta name="geo.region" content="PK" />
@@ -161,11 +176,11 @@ const SEO = ({
       <meta property="og:locale" content="en_US" />
 
       {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={fullUrl} />
-      <meta property="twitter:title" content={title} />
-      <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={fullImageUrl} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={fullUrl} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={fullImageUrl} />
 
       {/* Canonical URL */}
       <link rel="canonical" href={canonicalUrl} />
@@ -181,4 +196,3 @@ const SEO = ({
 };
 
 export default SEO;
-
