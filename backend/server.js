@@ -9,6 +9,7 @@ import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import sitemapRoutes from './routes/sitemapRoutes.js';
 
 dotenv.config();
 
@@ -122,6 +123,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/sitemap.xml', sitemapRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

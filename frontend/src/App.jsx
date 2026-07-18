@@ -1,5 +1,6 @@
-import { Routes, Route, useSearchParams } from 'react-router-dom';
+import { Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { trackPageView } from './lib/metaPixel';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
@@ -26,8 +27,14 @@ import axios from './config/axios';
 
 function App() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { activateQrDiscount, qrDiscount } = useDiscount();
   const { showToast } = useToast();
+
+  // Fire Meta Pixel pageView on every route change
+  useEffect(() => {
+    trackPageView();
+  }, [location.pathname]);
 
   useEffect(() => {
     if (searchParams.get('ref') === 'qr' && !qrDiscount) {

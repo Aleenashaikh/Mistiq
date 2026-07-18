@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import axios from '../config/axios';
 import { useDiscount } from '../context/DiscountContext';
+import { trackEvent, generateEventId } from '../lib/metaPixel';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -38,6 +39,16 @@ const Checkout = () => {
       }
     };
     fetchDeliveryCharge();
+
+    // Fire InitiateCheckout pixel event
+    const eventId = generateEventId();
+    try {
+      trackEvent('InitiateCheckout', {
+        num_items: cartItems.reduce((sum, i) => sum + i.quantity, 0),
+        currency: 'PKR',
+      }, eventId);
+    } catch (_) {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const subtotal = getCartTotal();
@@ -55,6 +66,9 @@ const Checkout = () => {
       showToast('Your cart is empty!', 'error');
       return;
     }
+
+    // Generate Purchase event ID for browser ↔ CAPI deduplication
+    const purchaseEventId = generateEventId();
 
     setLoading(true);
     try {
@@ -78,18 +92,30 @@ const Checkout = () => {
         },
         paymentMethod: 'COD',
         qrDiscount: qrDiscount,
+        purchaseEventId,  // For CAPI deduplication
       };
 
       // Create axios instance without auth header for orders (no login required)
-      // This instance will inherit baseURL from axios.defaults.baseURL
       const orderAxios = axios.create({
-        baseURL: axios.defaults.baseURL, // Explicitly set to ensure baseURL is used
+        baseURL: axios.defaults.baseURL,
       });
       const response = await orderAxios.post('/api/orders', orderData);
 
       clearCart();
       clearDiscount();
       showToast('Order placed successfully! You will receive a confirmation email shortly.', 'success');
+
+      // Fire Purchase pixel event (browser-side, matched with CAPI by purchaseEventId)
+      try {
+        trackEvent('Purchase', {
+          value: total,
+          currency: 'PKR',
+          content_ids: cartItems.map(i => i.product._id),
+          content_type: 'product',
+          num_items: cartItems.reduce((sum, i) => sum + i.quantity, 0),
+        }, purchaseEventId);
+      } catch (_) {}
+
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
       console.error('Order error:', error);

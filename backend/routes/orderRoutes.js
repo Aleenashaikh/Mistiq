@@ -4,6 +4,7 @@ import Product from '../models/Product.js';
 import Settings from '../models/Settings.js';
 import { authenticate } from '../middleware/auth.js';
 import { sendOrderNotificationToAdmin, sendOrderConfirmationToCustomer } from '../services/emailService.js';
+import { sendServerEvent } from '../utils/metaCapi.js';
 
 const router = express.Router();
 
@@ -109,6 +110,37 @@ router.post('/', async (req, res) => {
     if (customerEmail) {
       await sendOrderConfirmationToCustomer(order, customerEmail);
     }
+
+    // ── Meta Conversions API — Purchase event ─────────────────────────────
+    // Fire-and-forget; errors must never block the order response
+    try {
+      const { purchaseEventId, shippingAddress: sa } = req.body;
+      await sendServerEvent(
+        'Purchase',
+        purchaseEventId || `order-${order._id}`,
+        {
+          email: sa?.email || order.user?.email || '',
+          phone: sa?.phone || '',
+          firstName: sa?.firstName || '',
+          lastName: sa?.lastName || '',
+          city: sa?.city || '',
+          state: sa?.state || '',
+          zip: sa?.zipCode || '',
+          country: sa?.country || 'pk',
+        },
+        {
+          value: order.totalAmount,
+          currency: 'PKR',
+          content_ids: order.items.map(i => String(i.product?._id || i.product)),
+          content_type: 'product',
+          num_items: order.items.reduce((s, i) => s + i.quantity, 0),
+        },
+        `https://www.mistiq-perfumeries.com/checkout`
+      );
+    } catch (_) {
+      // CAPI failure is non-fatal
+    }
+    // ─────────────────────────────────────────────────────────────────────
 
     res.status(201).json(order);
   } catch (error) {

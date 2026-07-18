@@ -7,6 +7,7 @@ import { useToast } from '../context/ToastContext';
 import PriceDisplay from '../components/PriceDisplay';
 import SocialMediaLinks from '../components/SocialMediaLinks';
 import SEO from '../components/SEO';
+import { trackEvent, generateEventId } from '../lib/metaPixel';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
@@ -31,6 +32,22 @@ const ProductDetail = () => {
         setProduct(response.data);
         setActiveImage('main'); // Reset to main image when product changes
         setLoading(false);
+
+        // Fire ViewContent pixel event
+        const product = response.data;
+        const price = product.discountedPrice && product.discountedPrice > 0
+          ? product.discountedPrice
+          : (product.actualPrice || product.price);
+        const eventId = generateEventId();
+        try {
+          trackEvent('ViewContent', {
+            content_ids: [product._id],
+            content_name: product.name,
+            content_type: 'product',
+            value: price,
+            currency: 'PKR',
+          }, eventId);
+        } catch (_) {}
       } catch (error) {
         console.error('Error fetching product:', error);
         setLoading(false);
@@ -82,6 +99,20 @@ const ProductDetail = () => {
     const productWithPrice = { ...product, price: priceToUse };
     addToCart(productWithPrice, quantity);
     showToast('Product added to cart!', 'success');
+
+    // Fire AddToCart pixel event
+    const eventId = generateEventId();
+    try {
+      trackEvent('AddToCart', {
+        content_ids: [product._id],
+        content_name: product.name,
+        content_type: 'product',
+        value: priceToUse * quantity,
+        currency: 'PKR',
+        num_items: quantity,
+      }, eventId);
+    } catch (_) {}
+
     navigate('/cart');
   };
 
@@ -134,6 +165,39 @@ const ProductDetail = () => {
     return <div className="error">Product not found</div>;
   }
 
+  const siteUrl = 'https://www.mistiq-perfumeries.com';
+  const productPrice = product
+    ? (product.discountedPrice && product.discountedPrice > 0 ? product.discountedPrice : (product.actualPrice || product.price))
+    : 0;
+  const availability = product && product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+
+  const productJsonLd = product ? {
+    '@context': 'https://schema.org/',
+    '@type': 'Product',
+    name: product.name,
+    image: [product.bottleImage, product.hoverImage, product.thirdImage].filter(Boolean),
+    description: product.description || `Inspired by ${product.impressionOf}. ${product.gender} fragrance.`,
+    brand: { '@type': 'Brand', name: 'Mistiq Perfumeries' },
+    offers: {
+      '@type': 'Offer',
+      url: `${siteUrl}/products/${id}`,
+      priceCurrency: 'PKR',
+      price: productPrice,
+      availability,
+      seller: { '@type': 'Organization', name: 'Mistiq Perfumeries' },
+    },
+  } : null;
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Products', item: `${siteUrl}/products` },
+      { '@type': 'ListItem', position: 3, name: product?.name || 'Product', item: `${siteUrl}/products/${id}` },
+    ],
+  };
+
   return (
     <>
       <SEO 
@@ -145,6 +209,7 @@ const ProductDetail = () => {
         impressionOf={product?.impressionOf || ''}
         productName={product?.name || ''}
         gender={product?.gender || ''}
+        jsonLd={[...(productJsonLd ? [productJsonLd] : []), breadcrumbJsonLd]}
       />
       <div className="product-detail-page">
         <div className="product-detail-container">
@@ -157,20 +222,20 @@ const ProductDetail = () => {
           >
             <img 
               src={product.bottleImage || '/images/perfumes/placeholder.jpg'} 
-              alt={product.name}
+              alt={`${product.name} - ${product.impressionOf} inspired perfume bottle`}
               className={`detail-image ${activeImage === 'main' ? 'active' : ''}`}
             />
             {product.hoverImage && (
               <img 
                 src={product.hoverImage} 
-                alt={`${product.name} hover`}
+                alt={`${product.name} - alternate view of ${product.impressionOf} inspired fragrance`}
                 className={`detail-image ${activeImage === 'hover' ? 'active' : ''}`}
               />
             )}
             {product.thirdImage && (
               <img 
                 src={product.thirdImage} 
-                alt={`${product.name} third`}
+                alt={`${product.name} - lifestyle view of ${product.impressionOf} dupe`}
                 className={`detail-image ${activeImage === 'third' ? 'active' : ''}`}
               />
             )}
@@ -190,7 +255,7 @@ const ProductDetail = () => {
                   setActiveImage('main');
                 }}
               >
-                <img src={product.bottleImage} alt="Main" />
+                <img src={product.bottleImage} alt={`${product.name} main bottle view`} />
               </button>
               {product.hoverImage && (
                 <button 
@@ -206,7 +271,7 @@ const ProductDetail = () => {
                     setActiveImage('hover');
                   }}
                 >
-                  <img src={product.hoverImage} alt="Hover" />
+                  <img src={product.hoverImage} alt={`${product.name} alternate view`} />
                 </button>
               )}
               {product.thirdImage && (
@@ -223,7 +288,7 @@ const ProductDetail = () => {
                     setActiveImage('third');
                   }}
                 >
-                  <img src={product.thirdImage} alt="Third" />
+                  <img src={product.thirdImage} alt={`${product.name} lifestyle view`} />
                 </button>
               )}
             </div>

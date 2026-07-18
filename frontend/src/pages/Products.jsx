@@ -74,12 +74,34 @@ const Products = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [filters, products, categories]);
 
+  const siteUrl = 'https://www.mistiq-perfumeries.com';
+  const categoryParam = searchParams.get('category') || '';
+  const activeCategory = Object.keys(categories).find(k => k === categoryParam);
+  const categoryLabel = activeCategory
+    ? activeCategory.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')
+    : '';
+
+  const breadcrumbItems = [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Products', item: `${siteUrl}/products` },
+  ];
+  if (categoryLabel) {
+    breadcrumbItems.push({ '@type': 'ListItem', position: 3, name: categoryLabel, item: `${siteUrl}/products?category=${categoryParam}` });
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbItems,
+  };
+
   return (
     <>
       <SEO 
         title="Our Collection - Mistiq Perfumeries | Perfume Dupes & Designer Impressions"
         description="Explore our complete collection of luxury fragrances and designer perfume dupes. Find impressions of Gucci Flora, Miss Dior, Azzaro Wanted, Sauvage Dior, Tuscan Leather and more. Affordable designer alternatives."
         url="/products"
+        jsonLd={[breadcrumbJsonLd]}
       />
       <div className="products-page">
         <div className="products-hero">
@@ -124,7 +146,7 @@ const Products = () => {
                       )}
                       <img 
                         src={product.bottleImage || '/images/perfumes/placeholder.jpg'} 
-                        alt={product.name}
+                        alt={`${product.name} - ${product.impressionOf} inspired perfume`}
                         className="main-image"
                         onError={(e) => {
                           if (!e.target.dataset.errorHandled) {
@@ -136,7 +158,7 @@ const Products = () => {
                       {product.hoverImage && (
                         <img 
                           src={product.hoverImage} 
-                          alt={`${product.name} hover`}
+                          alt={`${product.name} alternate view`}
                           className="hover-image"
                           onError={(e) => {
                             if (!e.target.dataset.errorHandled) {

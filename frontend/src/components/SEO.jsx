@@ -121,10 +121,13 @@ const SEO = ({
   keywords = '',
   impressionOf = '',
   productName = '',
-  gender = ''
+  gender = '',
+  jsonLd = [],         // Array of JSON-LD objects to inject
+  canonical = '',      // Override canonical if needed
 }) => {
-  const siteUrl = import.meta.env.VITE_SITE_URL || 'https://yourdomain.com';
+  const siteUrl = 'https://www.mistiq-perfumeries.com';
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
+  const canonicalUrl = canonical || fullUrl;
   const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
   // Use provided keywords or generate comprehensive keywords
@@ -165,7 +168,14 @@ const SEO = ({
       <meta property="twitter:image" content={fullImageUrl} />
 
       {/* Canonical URL */}
-      <link rel="canonical" href={fullUrl} />
+      <link rel="canonical" href={canonicalUrl} />
+
+      {/* JSON-LD Structured Data */}
+      {jsonLd.map((schema, i) => (
+        <script key={i} type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      ))}
     </Helmet>
   );
 };
