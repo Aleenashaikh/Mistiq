@@ -59,6 +59,7 @@ const Footer = () => {
                 ))}
                 <li><Link to="/products?gender=Male">For Him</Link></li>
                 <li><Link to="/products?gender=Female">For Her</Link></li>
+                <li><Link to="/discovery-set">Discovery Set</Link></li>
               </ul>
             </div>
             <div className="footer-section">
@@ -339,6 +340,15 @@ const Layout = ({ children }) => {
                     closeMobileMenu();
                   }}
                 />
+              </li>
+              <li>
+                <Link
+                  to="/discovery-set"
+                  className={isActive('/discovery-set') ? 'is-active' : ''}
+                  onClick={closeMobileMenu}
+                >
+                  Discovery Set
+                </Link>
               </li>
               <li>
                 <Link

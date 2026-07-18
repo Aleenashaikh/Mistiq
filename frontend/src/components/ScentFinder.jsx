@@ -60,7 +60,6 @@ const ScentFinder = () => {
     <section className="scent-finder" aria-labelledby="scent-finder-title">
       <div className="scent-finder-inner">
         <div className="scent-finder-copy">
-          <p className="scent-finder-eyebrow">Interactive guide</p>
           <h2 id="scent-finder-title">Find your scent mood</h2>
           <p className="scent-finder-sub">
             Tap what you&apos;re feeling — we&apos;ll take you straight to matching

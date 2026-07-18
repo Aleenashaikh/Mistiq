@@ -1,0 +1,515 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+.discovery-page {
+  --disc-ink: #1a1714;
+  --disc-gold: #c9a961;
+  --disc-gold-soft: #e8d5a3;
+  --disc-cream: #faf8f5;
+  --disc-mist: #f3eee6;
+  background: var(--disc-cream);
+  color: var(--disc-ink);
+  overflow: hidden;
+}
+
+/* ── Hero ─────────────────────────────────────────────── */
+.discovery-hero {
+  position: relative;
+  min-height: min(88vh, 760px);
+  display: flex;
+  align-items: flex-end;
+  padding: calc(var(--hero-nav-offset, 64px) + 2rem) 1.5rem 3.5rem;
+}
+
+.discovery-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.discovery-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.discovery-hero-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(12, 10, 8, 0.35) 0%, rgba(12, 10, 8, 0.55) 45%, rgba(12, 10, 8, 0.88) 100%),
+    linear-gradient(90deg, rgba(12, 10, 8, 0.55) 0%, transparent 55%);
+}
+
+.discovery-hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  color: var(--disc-cream);
+}
+
+.discovery-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--disc-gold-soft);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.discovery-hero-copy h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(3.2rem, 9vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--disc-cream);
+  margin-bottom: 1.25rem;
+}
+
+.discovery-hero-lead {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.65;
+  font-weight: 300;
+  opacity: 0.92;
+  max-width: 34rem;
+  margin-bottom: 1.75rem;
+}
+
+.discovery-hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.discovery-hero-pills span {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid rgba(232, 213, 163, 0.45);
+  padding: 0.45rem 0.85rem;
+  color: var(--disc-gold-soft);
+}
+
+/* ── Builder ──────────────────────────────────────────── */
+.discovery-builder {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 3rem;
+}
+
+.discovery-builder-head {
+  text-align: center;
+  margin-bottom: 2.75rem;
+}
+
+.discovery-builder-head h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 2.85rem);
+  margin-bottom: 0.85rem;
+  color: var(--disc-ink);
+}
+
+.discovery-builder-head > p {
+  max-width: 34rem;
+  margin: 0 auto 1.75rem;
+  color: var(--charcoal);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.discovery-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.discovery-progress-track {
+  width: min(280px, 70%);
+  height: 2px;
+  background: var(--beige);
+  overflow: hidden;
+}
+
+.discovery-progress-fill {
+  height: 100%;
+  background: var(--disc-gold);
+  transition: width 0.35s ease;
+}
+
+.discovery-progress span {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  opacity: 0.75;
+}
+
+.discovery-loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--charcoal);
+  font-weight: 300;
+}
+
+/* Slots */
+.discovery-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.discovery-slot {
+  position: relative;
+  border-bottom: 1px solid rgba(26, 23, 20, 0.12);
+}
+
+.discovery-slot-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2.5rem 1rem 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  transition: background 0.2s ease;
+}
+
+.discovery-slot-trigger:hover {
+  background: rgba(201, 169, 97, 0.06);
+}
+
+.discovery-slot-num {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  border: 1px solid var(--disc-gold);
+  color: var(--disc-gold);
+}
+
+.discovery-slot.is-filled .discovery-slot-num {
+  background: var(--disc-ink);
+  border-color: var(--disc-ink);
+  color: var(--disc-cream);
+}
+
+.discovery-slot-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--charcoal);
+  opacity: 0.65;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.discovery-slot-product {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.discovery-slot-product img {
+  width: 48px;
+  height: 64px;
+  object-fit: contain;
+  background: var(--disc-mist);
+}
+
+.discovery-slot-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.discovery-slot-meta strong {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.92rem;
+}
+
+.discovery-slot-meta em {
+  font-style: normal;
+  font-size: 0.85rem;
+  color: var(--charcoal);
+  opacity: 0.8;
+  font-weight: 300;
+}
+
+.discovery-slot-clear {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: var(--charcoal);
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+
+.discovery-slot-clear:hover {
+  opacity: 1;
+}
+
+/* Dropdown */
+.discovery-dropdown {
+  list-style: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - 1px);
+  z-index: 20;
+  max-height: 320px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid rgba(26, 23, 20, 0.12);
+  box-shadow: var(--shadow-lift);
+}
+
+.discovery-dropdown button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  border-bottom: 1px solid rgba(26, 23, 20, 0.06);
+  transition: background 0.15s ease;
+}
+
+.discovery-dropdown button:hover,
+.discovery-dropdown button.is-active {
+  background: var(--disc-mist);
+}
+
+.discovery-dropdown img {
+  width: 40px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.discovery-dropdown span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.discovery-dropdown strong {
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.discovery-dropdown em {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: var(--charcoal);
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discovery-dropdown-price {
+  font-size: 0.85rem !important;
+  font-weight: 500;
+  color: var(--disc-ink);
+  white-space: nowrap;
+}
+
+.discovery-check {
+  color: var(--disc-gold);
+}
+
+/* Checkout bar */
+.discovery-checkout-bar {
+  margin-top: 2.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.discovery-total {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.discovery-total span {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  opacity: 0.7;
+}
+
+.discovery-total strong {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--disc-ink);
+}
+
+.discovery-cta {
+  min-width: min(100%, 320px);
+  padding: 1.05rem 2rem;
+  background: var(--disc-ink);
+  color: var(--disc-cream);
+  border: none;
+  font: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.discovery-cta:hover:not(:disabled) {
+  background: #2e2a26;
+  transform: translateY(-1px);
+}
+
+.discovery-cta:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.discovery-shop-link {
+  font-size: 0.85rem;
+  color: var(--charcoal);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.discovery-shop-link:hover {
+  color: var(--disc-ink);
+  border-bottom-color: var(--disc-gold);
+}
+
+/* Promise */
+.discovery-promise {
+  padding: 4rem 1.5rem 5rem;
+  background: var(--disc-ink);
+  color: var(--disc-cream);
+  text-align: center;
+}
+
+.discovery-promise h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.85rem, 4.5vw, 2.6rem);
+  color: var(--disc-cream);
+  margin-bottom: 2.5rem;
+  max-width: 22ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.discovery-promise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.discovery-promise article h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--disc-gold-soft);
+  margin-bottom: 0.65rem;
+  font-weight: 500;
+}
+
+.discovery-promise article p {
+  font-weight: 300;
+  line-height: 1.65;
+  opacity: 0.85;
+  font-size: 0.95rem;
+}
+
+/* Burst confetti */
+.discovery-burst {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+}
+
+.discovery-burst-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--c, var(--disc-gold));
+  animation: discovery-burst-fly var(--d, 0.7s) ease-out forwards;
+}
+
+@keyframes discovery-burst-fly {
+  to {
+    transform: translate(var(--x), var(--y)) rotate(var(--r));
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .discovery-hero {
+    min-height: min(78vh, 620px);
+    padding-bottom: 2.5rem;
+  }
+
+  .discovery-promise-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    text-align: center;
+  }
+
+  .discovery-dropdown button {
+    grid-template-columns: 36px 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .discovery-dropdown-price {
+    grid-column: 2;
+  }
+
+  .discovery-check {
+    display: none;
+  }
+}

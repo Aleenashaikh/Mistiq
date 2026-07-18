@@ -26,6 +26,16 @@ const orderSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
+    isTester: {
+      type: Boolean,
+      default: false,
+    },
+    size: {
+      type: String,
+    },
+    bundleId: {
+      type: String,
+    },
   }],
   shippingAddress: {
     firstName: String,

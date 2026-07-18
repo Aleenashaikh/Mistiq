@@ -6,7 +6,13 @@ import axios from '../config/axios';
 import './Cart.css';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    getCartTotal,
+    getCartItemKey,
+  } = useCart();
   const { qrDiscount } = useDiscount();
   const [deliveryCharge, setDeliveryCharge] = useState(200);
 
@@ -17,7 +23,6 @@ const Cart = () => {
         setDeliveryCharge(response.data.deliveryCharge);
       } catch (error) {
         console.error('Error fetching delivery charge:', error);
-        // Keep default 200 if fetch fails
       }
     };
     fetchDeliveryCharge();
@@ -39,38 +44,84 @@ const Cart = () => {
         ) : (
           <div className="cart-content">
             <div className="cart-items">
-              {cartItems.map((item) => (
-                <div key={item.product._id} className="cart-item">
-                  <img
-                    src={item.product.bottleImage || '/images/perfumes/placeholder.jpg'}
-                    alt={item.product.name}
-                    className="cart-item-image"
-                    loading="lazy"
-                  />
-                  <div className="cart-item-info">
-                    <h3>{item.product.name}</h3>
-                    <p>Rs {item.product.price}</p>
-                    <div className="quantity-controls">
-                      <button onClick={() => updateQuantity(item.product._id, item.quantity - 1)}>
-                        -
-                      </button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => updateQuantity(item.product._id, item.quantity + 1)}>
-                        +
+              {cartItems.map((item) => {
+                const key = getCartItemKey(item);
+
+                if (item.type === 'bundle') {
+                  return (
+                    <div key={key} className="cart-item cart-item--bundle">
+                      <div className="cart-bundle-thumbs" aria-hidden>
+                        {item.products.slice(0, 3).map((p) => (
+                          <img
+                            key={p._id}
+                            src={p.bottleImage || '/images/perfumes/placeholder.jpg'}
+                            alt=""
+                            loading="lazy"
+                          />
+                        ))}
+                      </div>
+                      <div className="cart-item-info">
+                        <h3>{item.name}</h3>
+                        <p className="cart-bundle-list">
+                          {item.products.map((p) => p.name).join(' · ')}
+                        </p>
+                        <p>Rs {item.price}</p>
+                        <div className="quantity-controls">
+                          <button onClick={() => updateQuantity(key, item.quantity - 1)}>
+                            -
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button onClick={() => updateQuantity(key, item.quantity + 1)}>
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="cart-item-total">
+                        <p>Rs {(item.price * item.quantity).toFixed(2)}</p>
+                        <button
+                          className="remove-btn"
+                          onClick={() => removeFromCart(key)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={key} className="cart-item">
+                    <img
+                      src={item.product.bottleImage || '/images/perfumes/placeholder.jpg'}
+                      alt={item.product.name}
+                      className="cart-item-image"
+                      loading="lazy"
+                    />
+                    <div className="cart-item-info">
+                      <h3>{item.product.name}</h3>
+                      <p>Rs {item.product.price}</p>
+                      <div className="quantity-controls">
+                        <button onClick={() => updateQuantity(key, item.quantity - 1)}>
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button onClick={() => updateQuantity(key, item.quantity + 1)}>
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div className="cart-item-total">
+                      <p>Rs {(item.product.price * item.quantity).toFixed(2)}</p>
+                      <button
+                        className="remove-btn"
+                        onClick={() => removeFromCart(key)}
+                      >
+                        Remove
                       </button>
                     </div>
                   </div>
-                  <div className="cart-item-total">
-                    <p>Rs {(item.product.price * item.quantity).toFixed(2)}</p>
-                    <button
-                      className="remove-btn"
-                      onClick={() => removeFromCart(item.product._id)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="cart-summary">
               {qrDiscount && (
@@ -106,4 +157,3 @@ const Cart = () => {
 };
 
 export default Cart;
-
