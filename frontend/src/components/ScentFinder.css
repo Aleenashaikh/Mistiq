@@ -25,15 +25,6 @@
   }
 }
 
-.scent-finder-eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(250, 248, 245, 0.55);
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
 .scent-finder-copy h2 {
   color: #faf8f5;
   font-size: clamp(1.45rem, 3.5vw, 2rem);

@@ -72,12 +72,26 @@ const Checkout = () => {
 
     setLoading(true);
     try {
-      const orderData = {
-        items: cartItems.map(item => ({
+      const orderItems = cartItems.flatMap((item) => {
+        if (item.type === 'bundle') {
+          return item.products.map((product) => ({
+            product: product._id,
+            quantity: item.quantity,
+            price: product.price,
+            isTester: true,
+            size: '10ml',
+            bundleId: item.id,
+          }));
+        }
+        return [{
           product: item.product._id,
           quantity: item.quantity,
           price: item.product.price,
-        })),
+        }];
+      });
+
+      const orderData = {
+        items: orderItems,
         shippingAddress: {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -110,9 +124,9 @@ const Checkout = () => {
         trackEvent('Purchase', {
           value: total,
           currency: 'PKR',
-          content_ids: cartItems.map(i => i.product._id),
+          content_ids: orderItems.map((i) => i.product),
           content_type: 'product',
-          num_items: cartItems.reduce((sum, i) => sum + i.quantity, 0),
+          num_items: orderItems.reduce((sum, i) => sum + i.quantity, 0),
         }, purchaseEventId);
       } catch (_) {}
 
@@ -270,12 +284,27 @@ const Checkout = () => {
               </div>
             )}
             <div className="summary-items">
-              {cartItems.map((item) => (
-                <div key={item.product._id} className="summary-item">
-                  <span>{item.product.name} x{item.quantity}</span>
-                  <span>Rs {(item.product.price * item.quantity).toFixed(2)}</span>
-                </div>
-              ))}
+              {cartItems.map((item) => {
+                if (item.type === 'bundle') {
+                  return (
+                    <div key={item.id} className="summary-item summary-item--bundle">
+                      <span>
+                        {item.name}
+                        <small style={{ display: 'block', opacity: 0.75, marginTop: 4 }}>
+                          {item.products.map((p) => p.name).join(', ')}
+                        </small>
+                      </span>
+                      <span>Rs {(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                  );
+                }
+                return (
+                  <div key={item.product._id} className="summary-item">
+                    <span>{item.product.name} x{item.quantity}</span>
+                    <span>Rs {(item.product.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                );
+              })}
             </div>
             <div className="summary-totals">
               <div className="summary-row">

@@ -170,7 +170,9 @@ const Orders = () => {
                 <td>
                   {order.items.map((item, idx) => (
                     <div key={idx}>
-                      {item.product?.name || 'N/A'} x{item.quantity}
+                      {item.product?.name || 'N/A'}
+                      {item.isTester ? ' (10ml Tester)' : ''}
+                      {' '}x{item.quantity}
                     </div>
                   ))}
                 </td>

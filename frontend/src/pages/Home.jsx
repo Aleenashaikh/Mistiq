@@ -2,6 +2,7 @@ import Hero from '../components/Hero';
 import HeroImagesSection from '../components/HeroImagesSection';
 import AnnouncementBanner from '../components/AnnouncementBanner';
 import ProductCategories from '../components/ProductCategories';
+import DiscoveryPromo from '../components/DiscoveryPromo';
 import ScentFinder from '../components/ScentFinder';
 import CircularSlider from '../components/CircularSlider';
 import Feedbacks from '../components/Feedbacks';
@@ -42,6 +43,7 @@ const Home = () => {
         <AnnouncementBanner />
         <HeroImagesSection />
         <ProductCategories />
+        <DiscoveryPromo />
         <ScentFinder />
         <CircularSlider />
         <Feedbacks />

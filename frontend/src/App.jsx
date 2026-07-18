@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import Feedback from './pages/Feedback';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import DiscoverySet from './pages/DiscoverySet';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Layout from './components/Layout';
@@ -99,6 +100,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:slug" element={<ProductDetail />} />
+                <Route path="/discovery-set" element={<DiscoverySet />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/feedback" element={<Feedback />} />

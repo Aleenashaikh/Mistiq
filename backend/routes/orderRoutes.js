@@ -5,6 +5,7 @@ import Settings from '../models/Settings.js';
 import { authenticate } from '../middleware/auth.js';
 import { sendOrderNotificationToAdmin, sendOrderConfirmationToCustomer } from '../services/emailService.js';
 import { sendServerEvent } from '../utils/metaCapi.js';
+import { getTesterPrice } from '../utils/testerPricing.js';
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.post('/', async (req, res) => {
     let totalAmount = 0;
     const settings = await Settings.getSettings();
     const DELIVERY_CHARGE = settings.deliveryCharge;
+    const normalizedItems = [];
 
     for (const item of items) {
       const product = await Product.findById(item.product);
@@ -30,7 +32,19 @@ router.post('/', async (req, res) => {
         });
       }
 
-      totalAmount += item.price * item.quantity;
+      const isTester = item.isTester === true;
+      const unitPrice = isTester ? getTesterPrice(product) : item.price;
+
+      normalizedItems.push({
+        product: item.product,
+        quantity: item.quantity,
+        price: unitPrice,
+        isTester,
+        size: isTester ? '10ml' : item.size,
+        bundleId: item.bundleId || undefined,
+      });
+
+      totalAmount += unitPrice * item.quantity;
     }
 
     // Apply QR code discount (10% off subtotal)
@@ -77,7 +91,7 @@ router.post('/', async (req, res) => {
 
     const order = new Order({
       orderNumber, // Set it explicitly
-      items,
+      items: normalizedItems,
       shippingAddress,
       totalAmount,
       discount: discountAmount,
@@ -91,7 +105,7 @@ router.post('/', async (req, res) => {
     await order.save();
 
     // Decrease stock for each product
-    for (const item of items) {
+    for (const item of normalizedItems) {
       await Product.findByIdAndUpdate(
         item.product,
         { $inc: { stock: -item.quantity } }

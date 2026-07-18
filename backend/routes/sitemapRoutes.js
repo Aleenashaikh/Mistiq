@@ -14,6 +14,7 @@ const SITE_URL = 'https://www.mistiq-perfumeries.com';
 const staticRoutes = [
   { loc: '/', priority: '1.0', changefreq: 'daily' },
   { loc: '/products', priority: '0.9', changefreq: 'daily' },
+  { loc: '/discovery-set', priority: '0.85', changefreq: 'weekly' },
   { loc: '/about', priority: '0.6', changefreq: 'monthly' },
   { loc: '/contact', priority: '0.6', changefreq: 'monthly' },
   { loc: '/feedback', priority: '0.5', changefreq: 'monthly' },

@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+.discovery-promo {
+  position: relative;
+  min-height: min(72vh, 640px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  color: #faf8f5;
+  margin-bottom: 1.5rem;
+}
+
+.discovery-promo-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.discovery-promo-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  transform: scale(1.04);
+  transition: transform 8s ease;
+}
+
+.discovery-promo.is-alive .discovery-promo-bg img {
+  transform: scale(1);
+}
+
+.discovery-promo-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(20, 14, 8, 0.25) 0%, rgba(12, 10, 8, 0.72) 70%),
+    linear-gradient(180deg, rgba(12, 10, 8, 0.45) 0%, rgba(12, 10, 8, 0.78) 100%);
+}
+
+/* Confetti */
+.discovery-promo-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  clip-path: inset(0);
+}
+
+.discovery-promo.is-alive .discovery-promo-confetti {
+  opacity: 1;
+}
+
+.discovery-promo-piece {
+  position: absolute;
+  top: -12px;
+  border-radius: 1px;
+  opacity: 0;
+  transform: rotate(var(--rot, 0deg));
+  animation-name: discovery-confetti-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.discovery-promo.is-alive .discovery-promo-piece {
+  opacity: 0.9;
+}
+
+.discovery-promo-piece.tone-0 {
+  background: #c9a961;
+}
+
+.discovery-promo-piece.tone-1 {
+  background: #e8d5a3;
+}
+
+.discovery-promo-piece.tone-2 {
+  background: #faf8f5;
+}
+
+.discovery-promo-piece.tone-3 {
+  background: #a89050;
+  border-radius: 50%;
+}
+
+@keyframes discovery-confetti-fall {
+  0% {
+    transform: translateY(0) rotate(var(--rot, 0deg));
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(720px) rotate(calc(var(--rot, 0deg) + 280deg));
+    opacity: 0;
+  }
+}
+
+.discovery-promo-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  max-width: 640px;
+}
+
+.discovery-promo-brand {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #e8d5a3;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+}
+
+.discovery-promo-inner h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.8rem, 8vw, 4.5rem);
+  line-height: 1;
+  color: #faf8f5;
+  margin-bottom: 1.15rem;
+  letter-spacing: 0.02em;
+}
+
+.discovery-promo-lead {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.7;
+  font-weight: 300;
+  opacity: 0.92;
+  margin: 0 auto 2rem;
+  max-width: 28rem;
+}
+
+.discovery-promo-cta {
+  display: inline-block;
+  padding: 1rem 2.1rem;
+  background: #c9a961;
+  color: #1a1714;
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: 0 8px 28px rgba(201, 169, 97, 0.25);
+}
+
+.discovery-promo-cta:hover {
+  background: #e8d5a3;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(201, 169, 97, 0.35);
+}
+
+@media (max-width: 640px) {
+  .discovery-promo {
+    min-height: min(68vh, 560px);
+  }
+
+  .discovery-promo-inner {
+    padding: 3rem 1.25rem;
+  }
+}

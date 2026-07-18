@@ -30,7 +30,7 @@ export const sendOrderNotificationToAdmin = async (order) => {
         <ul>
           ${order.items.map(item => `
             <li>
-              ${item.product.name || 'Product'} - 
+              ${item.product.name || 'Product'}${item.isTester ? ' (10ml Tester)' : ''} - 
               Quantity: ${item.quantity} - 
                 Price: Rs ${item.price.toFixed(2)}
             </li>
@@ -80,7 +80,7 @@ export const sendOrderConfirmationToCustomer = async (order, customerEmail) => {
           <ul>
             ${order.items.map(item => `
               <li style="margin: 10px 0;">
-                ${item.product.name || 'Product'} - 
+                ${item.product.name || 'Product'}${item.isTester ? ' (10ml Tester)' : ''} - 
                 Quantity: ${item.quantity} - 
                 Price: Rs ${item.price.toFixed(2)}
               </li>
