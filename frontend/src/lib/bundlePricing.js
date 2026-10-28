@@ -1,7 +1,7 @@
 /** Discovery Set tester pricing — rate is backend-aligned; never surface in UI copy. */
 export const TESTER_PRICE_RATE = 0.15;
 export const DISCOVERY_SET_SIZE = 5;
-export const TESTER_VOLUME_ML = 10;
+export const TESTER_VOLUME_ML = 5;
 
 export function getProductEffectivePrice(product) {
   if (!product) return 0;
