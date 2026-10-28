@@ -96,7 +96,7 @@ const DiscoverySet = () => {
     <>
       <SEO
         title="Discovery Set — Taste Five Favourites | Mistiq"
-        description="Curate five 10ml perfume testers. Sample your favourites at home, then order the full bottles you love. A taste of Mistiq before you commit."
+        description="Curate five 5ml perfume testers. Sample your favourites at home, then order the full bottles you love. A taste of Mistiq before you commit."
         url="/discovery-set"
       />
 
@@ -117,7 +117,7 @@ const DiscoverySet = () => {
             <h1 id="discovery-hero-title">A Taste of Five</h1>
             <p className="discovery-hero-lead">
               Can&apos;t choose just one? Sample five of your favourites in
-              elegant 10ml testers — wear them, live in them, then come back for
+              elegant 5ml testers — wear them, live in them, then come back for
               the full bottles that stole your heart.
             </p>
             <div className="discovery-hero-pills" aria-hidden>

@@ -52,7 +52,7 @@ export const CartProvider = ({ children }) => {
     const bundle = {
       type: 'bundle',
       id: createId(),
-      name: 'Discovery Set — 5 × 10ml Testers',
+      name: 'Discovery Set — 5 × 5ml Testers',
       products: products.map((p) => ({ ...p })),
       quantity: 1,
       price: total,

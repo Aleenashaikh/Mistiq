@@ -79,7 +79,7 @@ const Checkout = () => {
             quantity: item.quantity,
             price: product.price,
             isTester: true,
-            size: '10ml',
+            size: '5ml',
             bundleId: item.id,
           }));
         }

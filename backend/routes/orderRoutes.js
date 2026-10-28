@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
         quantity: item.quantity,
         price: unitPrice,
         isTester,
-        size: isTester ? '10ml' : item.size,
+        size: isTester ? '5ml' : item.size,
         bundleId: item.bundleId || undefined,
       });
 

@@ -75,7 +75,7 @@ const DiscoveryPromo = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.16 }}
         >
-          Curate five 10ml testers of your favourite fragrances. Sample them all
+          Curate five 5ml testers of your favourite fragrances. Sample them all
           at home — then order the full bottles you can&apos;t live without.
         </motion.p>
         <motion.div
